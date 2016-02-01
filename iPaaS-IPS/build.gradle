@@ -100,7 +100,7 @@ sourceSets {
 }
 
 ext {
-	moduleName="iPaas-IPS";
+	moduleName="iPaas-IDPS";
 	moduleVersion="0.1-SNAPSHOT"
 	publishUserName = "devadm"
 	publishUserPassword = "Devadm@1212"
@@ -131,7 +131,8 @@ dependencies{
 	compile "javax.servlet:javax.servlet-api:3.1.0"
 	compile "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
 	
-
+	
+	compile "org.mongodb:mongo-java-driver:3.1.0"
 	compile 'org.javassist:javassist:3.19.0-GA'
 
 	// restful
@@ -142,8 +143,7 @@ dependencies{
 	compile 'org.apache.httpcomponents:httpclient:4.4.1'
 	
 	
-	compile 'com.ai:ipaas-dbs:0.3-SNAPSHOT'
-	compile 'com.ai:ipaas-ses:0.1.1-SNAPSHOT'
+	compile 'com.ai:ipaas-dss:0.2-SNAPSHOT'
 	
 	testCompile "org.springframework:spring-test:4.1.6.RELEASE"
 	testCompile "junit:junit:4.11"
@@ -156,13 +156,16 @@ dependencies{
 	compile 'commons-codec:commons-codec:1.9'
 	compile 'commons-logging:commons-logging:1.2.1-SNAPSHOT'
 	
+	
+	compile "com.sharneng:gm4java:1.1.0"
+	
 	compile "org.apache.commons:commons-dbcp2:2.1"
 	compile "com.oracle:ojdbc14:10.2.0.4.0"
 	
 }
 
 war {
-    baseName = "iPaas-Search"
+    baseName = "iPaas-IDPS"
 }
 
 jar {
