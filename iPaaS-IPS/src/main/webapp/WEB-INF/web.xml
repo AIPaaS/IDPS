@@ -1,44 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	id="WebApp_ID" version="2.5">
-	<display-name>ips</display-name>
-	<!-- 登录身份验证Filter -->
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>LoginFilter</filter-name>
-		<filter-class>com.ai.paas.ipaas.ses.dataimport.filter.LoginFilter</filter-class>
-		<init-param>
-			<param-name>ignore_suffix</param-name>
-			<param-value>.map,.ico,.swf,.flv,.png,.jpg,.jpeg,.gif,.css,.js,.html,.htm</param-value>
-		</init-param>
-		<init-param>
-			<param-name>ignore_pages</param-name>
-			<param-value>/login/noLogin,/login/doLogin,/login/login,/head/plugin,/resources/head/dist/base/reset.css,/resources/head/dist/app.js,
-			/resources/head/dist/vendor.js,/resources/head/dist/i18n.js,/resources/head/dist/app.css,/resources/head/dist/vendor.css
-			</param-value>
-		</init-param>
-	</filter>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ 	
+ 	
+ 	<display-name>iPaaS-IPS</display-name>
+	<context-param>
+		<param-name>appName</param-name>
+		<param-value>iPaas-IPS</param-value>
+	</context-param>
 	
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-		
-		<filter-name>LoginFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	<servlet>
+		<servlet-name>htmlServer</servlet-name>
+		<servlet-class>com.ai.paas.image.StaticHtmlServlet</servlet-class>
+		<load-on-startup>-1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>htmlServer</servlet-name>
+		<url-pattern>/static/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>imageServer</servlet-name>
+		<servlet-class>com.ai.paas.ipaas.ips.ImageServlet</servlet-class>
+		<load-on-startup>-1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>imageServer</servlet-name>
+		<url-pattern>/image/*</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>springmvc</servlet-name>
@@ -54,12 +45,30 @@
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping> 
+	<servlet>
+		<servlet-name>UpImageServlet</servlet-name>
+		<servlet-class>com.ai.paas.ipaas.ips.UpImageServlet</servlet-class>
+		<load-on-startup>-1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpImageServlet</servlet-name>
+		<url-pattern>/upImage</url-pattern>
 	</servlet-mapping>
-
-	<session-config>
-　　　　<session-timeout>600</session-timeout>
-　　</session-config>
+	
+	<servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/UploadServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description/>
+        <display-name>UploadServlet</display-name>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.ai.paas.ipaas.ips.UploadServlet</servlet-class>
+    </servlet>
+    
+	
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>/index.jsp</welcome-file>
 	</welcome-file-list>
 </web-app>

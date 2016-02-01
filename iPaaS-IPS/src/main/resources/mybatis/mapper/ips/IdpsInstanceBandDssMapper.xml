@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.paas.ipaas.ips.dao.interfaces.IdpsInstanceBandDssMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDss" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="service_id" property="serviceId" jdbcType="VARCHAR" />
+    <result column="dss_service_id" property="dssServiceId" jdbcType="VARCHAR" />
+    <result column="dss_pid" property="dssPid" jdbcType="VARCHAR" />
+    <result column="dss_service_pwd" property="dssServicePwd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, service_id, dss_service_id, dss_pid, dss_service_pwd
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDssCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from idps_instance_band_dss
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from idps_instance_band_dss
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from idps_instance_band_dss
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDssCriteria" >
+    delete from idps_instance_band_dss
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDss" >
+    insert into idps_instance_band_dss (id, user_id, service_id, 
+      dss_service_id, dss_pid, dss_service_pwd
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{serviceId,jdbcType=VARCHAR}, 
+      #{dssServiceId,jdbcType=VARCHAR}, #{dssPid,jdbcType=VARCHAR}, #{dssServicePwd,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDss" >
+    insert into idps_instance_band_dss
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+      <if test="dssServiceId != null" >
+        dss_service_id,
+      </if>
+      <if test="dssPid != null" >
+        dss_pid,
+      </if>
+      <if test="dssServicePwd != null" >
+        dss_service_pwd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="dssServiceId != null" >
+        #{dssServiceId,jdbcType=VARCHAR},
+      </if>
+      <if test="dssPid != null" >
+        #{dssPid,jdbcType=VARCHAR},
+      </if>
+      <if test="dssServicePwd != null" >
+        #{dssServicePwd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDssCriteria" resultType="java.lang.Integer" >
+    select count(*) from idps_instance_band_dss
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update idps_instance_band_dss
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceId != null" >
+        service_id = #{record.serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dssServiceId != null" >
+        dss_service_id = #{record.dssServiceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dssPid != null" >
+        dss_pid = #{record.dssPid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dssServicePwd != null" >
+        dss_service_pwd = #{record.dssServicePwd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update idps_instance_band_dss
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      service_id = #{record.serviceId,jdbcType=VARCHAR},
+      dss_service_id = #{record.dssServiceId,jdbcType=VARCHAR},
+      dss_pid = #{record.dssPid,jdbcType=VARCHAR},
+      dss_service_pwd = #{record.dssServicePwd,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDss" >
+    update idps_instance_band_dss
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null" >
+        service_id = #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="dssServiceId != null" >
+        dss_service_id = #{dssServiceId,jdbcType=VARCHAR},
+      </if>
+      <if test="dssPid != null" >
+        dss_pid = #{dssPid,jdbcType=VARCHAR},
+      </if>
+      <if test="dssServicePwd != null" >
+        dss_service_pwd = #{dssServicePwd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsInstanceBandDss" >
+    update idps_instance_band_dss
+    set user_id = #{userId,jdbcType=VARCHAR},
+      service_id = #{serviceId,jdbcType=VARCHAR},
+      dss_service_id = #{dssServiceId,jdbcType=VARCHAR},
+      dss_pid = #{dssPid,jdbcType=VARCHAR},
+      dss_service_pwd = #{dssServicePwd,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

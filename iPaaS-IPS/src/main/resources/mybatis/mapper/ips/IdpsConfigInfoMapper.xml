@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.paas.ipaas.ips.dao.interfaces.IdpsConfigInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gm_mode" property="gmMode" jdbcType="VARCHAR" />
+    <result column="gm_path" property="gmPath" jdbcType="VARCHAR" />
+    <result column="image_root" property="imageRoot" jdbcType="VARCHAR" />
+    <result column="image_name_split" property="imageNameSplit" jdbcType="VARCHAR" />
+    <result column="image_type" property="imageType" jdbcType="VARCHAR" />
+    <result column="image_root_new" property="imageRootNew" jdbcType="VARCHAR" />
+    <result column="max_active" property="maxActive" jdbcType="VARCHAR" />
+    <result column="max_idle" property="maxIdle" jdbcType="VARCHAR" />
+    <result column="max_wait" property="maxWait" jdbcType="VARCHAR" />
+    <result column="test_on_borrow" property="testOnBorrow" jdbcType="VARCHAR" />
+    <result column="test_on_return" property="testOnReturn" jdbcType="VARCHAR" />
+    <result column="reserve_image" property="reserveImage" jdbcType="VARCHAR" />
+    <result column="extent" property="extent" jdbcType="VARCHAR" />
+    <result column="quality" property="quality" jdbcType="VARCHAR" />
+    <result column="command_size" property="commandSize" jdbcType="VARCHAR" />
+    <result column="server_url" property="serverUrl" jdbcType="VARCHAR" />
+    <result column="upload_url" property="uploadUrl" jdbcType="VARCHAR" />
+    <result column="auth_url" property="authUrl" jdbcType="VARCHAR" />
+    <result column="up_path" property="upPath" jdbcType="VARCHAR" />
+    <result column="up_path_new" property="upPathNew" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, gm_mode, gm_path, image_root, image_name_split, image_type, image_root_new, max_active, 
+    max_idle, max_wait, test_on_borrow, test_on_return, reserve_image, extent, quality, 
+    command_size, server_url, upload_url, auth_url, up_path, up_path_new
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfoCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from idps_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart != null and limitStart>=0" >
+      limit #{limitStart} , #{limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from idps_config_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from idps_config_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfoCriteria" >
+    delete from idps_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfo" >
+    insert into idps_config_info (id, gm_mode, gm_path, 
+      image_root, image_name_split, image_type, 
+      image_root_new, max_active, max_idle, 
+      max_wait, test_on_borrow, test_on_return, 
+      reserve_image, extent, quality, 
+      command_size, server_url, upload_url, 
+      auth_url, up_path, up_path_new
+      )
+    values (#{id,jdbcType=INTEGER}, #{gmMode,jdbcType=VARCHAR}, #{gmPath,jdbcType=VARCHAR}, 
+      #{imageRoot,jdbcType=VARCHAR}, #{imageNameSplit,jdbcType=VARCHAR}, #{imageType,jdbcType=VARCHAR}, 
+      #{imageRootNew,jdbcType=VARCHAR}, #{maxActive,jdbcType=VARCHAR}, #{maxIdle,jdbcType=VARCHAR}, 
+      #{maxWait,jdbcType=VARCHAR}, #{testOnBorrow,jdbcType=VARCHAR}, #{testOnReturn,jdbcType=VARCHAR}, 
+      #{reserveImage,jdbcType=VARCHAR}, #{extent,jdbcType=VARCHAR}, #{quality,jdbcType=VARCHAR}, 
+      #{commandSize,jdbcType=VARCHAR}, #{serverUrl,jdbcType=VARCHAR}, #{uploadUrl,jdbcType=VARCHAR}, 
+      #{authUrl,jdbcType=VARCHAR}, #{upPath,jdbcType=VARCHAR}, #{upPathNew,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfo" >
+    insert into idps_config_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gmMode != null" >
+        gm_mode,
+      </if>
+      <if test="gmPath != null" >
+        gm_path,
+      </if>
+      <if test="imageRoot != null" >
+        image_root,
+      </if>
+      <if test="imageNameSplit != null" >
+        image_name_split,
+      </if>
+      <if test="imageType != null" >
+        image_type,
+      </if>
+      <if test="imageRootNew != null" >
+        image_root_new,
+      </if>
+      <if test="maxActive != null" >
+        max_active,
+      </if>
+      <if test="maxIdle != null" >
+        max_idle,
+      </if>
+      <if test="maxWait != null" >
+        max_wait,
+      </if>
+      <if test="testOnBorrow != null" >
+        test_on_borrow,
+      </if>
+      <if test="testOnReturn != null" >
+        test_on_return,
+      </if>
+      <if test="reserveImage != null" >
+        reserve_image,
+      </if>
+      <if test="extent != null" >
+        extent,
+      </if>
+      <if test="quality != null" >
+        quality,
+      </if>
+      <if test="commandSize != null" >
+        command_size,
+      </if>
+      <if test="serverUrl != null" >
+        server_url,
+      </if>
+      <if test="uploadUrl != null" >
+        upload_url,
+      </if>
+      <if test="authUrl != null" >
+        auth_url,
+      </if>
+      <if test="upPath != null" >
+        up_path,
+      </if>
+      <if test="upPathNew != null" >
+        up_path_new,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gmMode != null" >
+        #{gmMode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmPath != null" >
+        #{gmPath,jdbcType=VARCHAR},
+      </if>
+      <if test="imageRoot != null" >
+        #{imageRoot,jdbcType=VARCHAR},
+      </if>
+      <if test="imageNameSplit != null" >
+        #{imageNameSplit,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null" >
+        #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageRootNew != null" >
+        #{imageRootNew,jdbcType=VARCHAR},
+      </if>
+      <if test="maxActive != null" >
+        #{maxActive,jdbcType=VARCHAR},
+      </if>
+      <if test="maxIdle != null" >
+        #{maxIdle,jdbcType=VARCHAR},
+      </if>
+      <if test="maxWait != null" >
+        #{maxWait,jdbcType=VARCHAR},
+      </if>
+      <if test="testOnBorrow != null" >
+        #{testOnBorrow,jdbcType=VARCHAR},
+      </if>
+      <if test="testOnReturn != null" >
+        #{testOnReturn,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveImage != null" >
+        #{reserveImage,jdbcType=VARCHAR},
+      </if>
+      <if test="extent != null" >
+        #{extent,jdbcType=VARCHAR},
+      </if>
+      <if test="quality != null" >
+        #{quality,jdbcType=VARCHAR},
+      </if>
+      <if test="commandSize != null" >
+        #{commandSize,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUrl != null" >
+        #{uploadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="authUrl != null" >
+        #{authUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="upPath != null" >
+        #{upPath,jdbcType=VARCHAR},
+      </if>
+      <if test="upPathNew != null" >
+        #{upPathNew,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfoCriteria" resultType="java.lang.Integer" >
+    select count(*) from idps_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update idps_config_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmMode != null" >
+        gm_mode = #{record.gmMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmPath != null" >
+        gm_path = #{record.gmPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageRoot != null" >
+        image_root = #{record.imageRoot,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageNameSplit != null" >
+        image_name_split = #{record.imageNameSplit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageType != null" >
+        image_type = #{record.imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageRootNew != null" >
+        image_root_new = #{record.imageRootNew,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxActive != null" >
+        max_active = #{record.maxActive,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxIdle != null" >
+        max_idle = #{record.maxIdle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxWait != null" >
+        max_wait = #{record.maxWait,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testOnBorrow != null" >
+        test_on_borrow = #{record.testOnBorrow,jdbcType=VARCHAR},
+      </if>
+      <if test="record.testOnReturn != null" >
+        test_on_return = #{record.testOnReturn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reserveImage != null" >
+        reserve_image = #{record.reserveImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extent != null" >
+        extent = #{record.extent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quality != null" >
+        quality = #{record.quality,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commandSize != null" >
+        command_size = #{record.commandSize,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serverUrl != null" >
+        server_url = #{record.serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uploadUrl != null" >
+        upload_url = #{record.uploadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authUrl != null" >
+        auth_url = #{record.authUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upPath != null" >
+        up_path = #{record.upPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upPathNew != null" >
+        up_path_new = #{record.upPathNew,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update idps_config_info
+    set id = #{record.id,jdbcType=INTEGER},
+      gm_mode = #{record.gmMode,jdbcType=VARCHAR},
+      gm_path = #{record.gmPath,jdbcType=VARCHAR},
+      image_root = #{record.imageRoot,jdbcType=VARCHAR},
+      image_name_split = #{record.imageNameSplit,jdbcType=VARCHAR},
+      image_type = #{record.imageType,jdbcType=VARCHAR},
+      image_root_new = #{record.imageRootNew,jdbcType=VARCHAR},
+      max_active = #{record.maxActive,jdbcType=VARCHAR},
+      max_idle = #{record.maxIdle,jdbcType=VARCHAR},
+      max_wait = #{record.maxWait,jdbcType=VARCHAR},
+      test_on_borrow = #{record.testOnBorrow,jdbcType=VARCHAR},
+      test_on_return = #{record.testOnReturn,jdbcType=VARCHAR},
+      reserve_image = #{record.reserveImage,jdbcType=VARCHAR},
+      extent = #{record.extent,jdbcType=VARCHAR},
+      quality = #{record.quality,jdbcType=VARCHAR},
+      command_size = #{record.commandSize,jdbcType=VARCHAR},
+      server_url = #{record.serverUrl,jdbcType=VARCHAR},
+      upload_url = #{record.uploadUrl,jdbcType=VARCHAR},
+      auth_url = #{record.authUrl,jdbcType=VARCHAR},
+      up_path = #{record.upPath,jdbcType=VARCHAR},
+      up_path_new = #{record.upPathNew,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfo" >
+    update idps_config_info
+    <set >
+      <if test="gmMode != null" >
+        gm_mode = #{gmMode,jdbcType=VARCHAR},
+      </if>
+      <if test="gmPath != null" >
+        gm_path = #{gmPath,jdbcType=VARCHAR},
+      </if>
+      <if test="imageRoot != null" >
+        image_root = #{imageRoot,jdbcType=VARCHAR},
+      </if>
+      <if test="imageNameSplit != null" >
+        image_name_split = #{imageNameSplit,jdbcType=VARCHAR},
+      </if>
+      <if test="imageType != null" >
+        image_type = #{imageType,jdbcType=VARCHAR},
+      </if>
+      <if test="imageRootNew != null" >
+        image_root_new = #{imageRootNew,jdbcType=VARCHAR},
+      </if>
+      <if test="maxActive != null" >
+        max_active = #{maxActive,jdbcType=VARCHAR},
+      </if>
+      <if test="maxIdle != null" >
+        max_idle = #{maxIdle,jdbcType=VARCHAR},
+      </if>
+      <if test="maxWait != null" >
+        max_wait = #{maxWait,jdbcType=VARCHAR},
+      </if>
+      <if test="testOnBorrow != null" >
+        test_on_borrow = #{testOnBorrow,jdbcType=VARCHAR},
+      </if>
+      <if test="testOnReturn != null" >
+        test_on_return = #{testOnReturn,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveImage != null" >
+        reserve_image = #{reserveImage,jdbcType=VARCHAR},
+      </if>
+      <if test="extent != null" >
+        extent = #{extent,jdbcType=VARCHAR},
+      </if>
+      <if test="quality != null" >
+        quality = #{quality,jdbcType=VARCHAR},
+      </if>
+      <if test="commandSize != null" >
+        command_size = #{commandSize,jdbcType=VARCHAR},
+      </if>
+      <if test="serverUrl != null" >
+        server_url = #{serverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadUrl != null" >
+        upload_url = #{uploadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="authUrl != null" >
+        auth_url = #{authUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="upPath != null" >
+        up_path = #{upPath,jdbcType=VARCHAR},
+      </if>
+      <if test="upPathNew != null" >
+        up_path_new = #{upPathNew,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.paas.ipaas.ips.dao.mapper.bo.IdpsConfigInfo" >
+    update idps_config_info
+    set gm_mode = #{gmMode,jdbcType=VARCHAR},
+      gm_path = #{gmPath,jdbcType=VARCHAR},
+      image_root = #{imageRoot,jdbcType=VARCHAR},
+      image_name_split = #{imageNameSplit,jdbcType=VARCHAR},
+      image_type = #{imageType,jdbcType=VARCHAR},
+      image_root_new = #{imageRootNew,jdbcType=VARCHAR},
+      max_active = #{maxActive,jdbcType=VARCHAR},
+      max_idle = #{maxIdle,jdbcType=VARCHAR},
+      max_wait = #{maxWait,jdbcType=VARCHAR},
+      test_on_borrow = #{testOnBorrow,jdbcType=VARCHAR},
+      test_on_return = #{testOnReturn,jdbcType=VARCHAR},
+      reserve_image = #{reserveImage,jdbcType=VARCHAR},
+      extent = #{extent,jdbcType=VARCHAR},
+      quality = #{quality,jdbcType=VARCHAR},
+      command_size = #{commandSize,jdbcType=VARCHAR},
+      server_url = #{serverUrl,jdbcType=VARCHAR},
+      upload_url = #{uploadUrl,jdbcType=VARCHAR},
+      auth_url = #{authUrl,jdbcType=VARCHAR},
+      up_path = #{upPath,jdbcType=VARCHAR},
+      up_path_new = #{upPathNew,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
