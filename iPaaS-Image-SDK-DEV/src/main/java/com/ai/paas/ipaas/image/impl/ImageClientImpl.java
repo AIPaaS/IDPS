@@ -1,6 +1,7 @@
 package com.ai.paas.ipaas.image.impl;
 //接口定义
 
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,8 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.paas.ipaas.utils.HttpUtil;
@@ -69,9 +73,37 @@ public class ImageClientImpl implements IImageClient{
 		return imageUrl;
 	}
 	
+	public InputStream downloadImage(String imageId,String imageType,String imageScale){
+		
+		String downloadUrl = "";
+		if(StringUtils.isEmpty(imageScale)){
+			downloadUrl = imageUrl+"/image/"+imageId+imageType+"?userId="+userId+"&serviceId="+serviceId;
+		}else{
+			downloadUrl = imageUrl+"/image/"+imageId+"_"+imageScale+imageType+"?userId="+userId+"&serviceId="+serviceId;
+		}
+		HttpClient client = new HttpClient();
+		GetMethod httpGet = new GetMethod(downloadUrl);
+		
+		InputStream in  = null ;
+		try {  
+            client.executeMethod(httpGet);  
+              
+           in = httpGet.getResponseBodyAsStream();  
+              
+        }catch (Exception e){  
+            e.printStackTrace();  
+        }finally{  
+            httpGet.releaseConnection();  
+        }  
+        System.out.println("download, success!!");  
+		
+		return in;
+	}
+	
+	
 	public String getImageUrl(String imageId,String imageType){
 		
-		return imageUrlOut+"/image/"+imageId+imageType;
+		return imageUrl+"/image/"+imageId+imageType+"?userId="+userId+"&serviceId="+serviceId;
 	}
 	
 	public  String getUpImageUrl(){

@@ -69,4 +69,12 @@ public class ImageTest {
 		
 	}
 	
+	@Test
+	public void downTest() {
+		
+	    im.downloadImage("56aa08347960b60009db8a3d", ".jpg", "");
+		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
+		
+	}
+	
 }

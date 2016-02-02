@@ -29,7 +29,7 @@ public class ImageClientFactory {
 	private static Map<String, IImageClient> imageClients = new ConcurrentHashMap<String, IImageClient>();
 	private final static String SEARCH_CONFIG_PATH = "/IDPS/";
 	public static final String IMAGE_URL_PATH = "IMAGEURL";
-	public static final String IMAGE_URL_OUT_PATH = "/IMAGEURL_OUT/";
+	public static final String IMAGE_URL_OUT_PATH = "/IMAGEURL_OUT";
 	private final static String ELASTIC_HOST = "hosts";
 	private final static String ELASTIC_MAPPING = "mapping";
 	
@@ -75,7 +75,7 @@ public class ImageClientFactory {
 				authResult.getConfigUser(),authResult.getConfigPasswd()).get(SEARCH_CONFIG_PATH+srvId+IMAGE_URL_OUT_PATH,watch);
 		
 		Map<String,String> configMO = new HashMap<String,String>();
-		configMO = gson.fromJson(imageConfig, configMO.getClass());
+		configMO = gson.fromJson(imageUrlOutM, configMO.getClass());
 		
 		String imageUrlOut = configMO.get(IMAGE_URL_PATH);
 		iImageClient = new ImageClientImpl(userId,srvId,imageUrl,imageUrlOut);
