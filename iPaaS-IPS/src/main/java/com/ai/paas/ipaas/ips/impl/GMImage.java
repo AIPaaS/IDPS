@@ -44,8 +44,8 @@ public class GMImage implements ConfigurationWatcher,IImage {
 	private static final String UPPATH_KEY = "upPath"; 
 	private static final String UPPATHNEW_KEY = "upPathNew"; 
 	
-	private static final String SERVERURL_KEY = "serverUrl"; 
-	private static final String UPLOADURL_KEY = "uploadUrl"; 
+//	private static final String SERVERURL_KEY = "serverUrl"; 
+//	private static final String UPLOADURL_KEY = "uploadUrl"; 
 	
 	private String  gmPath = null;
 	
@@ -83,9 +83,9 @@ public class GMImage implements ConfigurationWatcher,IImage {
 	//上传图片  转换格式后的本地路径
 	private String upPathNew;
 	//图片服务器地址
-	private String serverUrl;
-	//图片上传，使用内网地址
-	private String uploadUrl;
+//	private String serverUrl;
+//	//图片上传，使用内网地址
+//	private String uploadUrl;
 	
 	private GMClient gMClient;
 	private ConfigurationCenter confCenter = null;
@@ -173,8 +173,6 @@ public class GMImage implements ConfigurationWatcher,IImage {
 		upPath = jsonObj.get(UPPATH_KEY);
 		upPathNew = jsonObj.get(UPPATHNEW_KEY);
 	
-		serverUrl = jsonObj.get(SERVERURL_KEY);
-		uploadUrl = jsonObj.get(UPLOADURL_KEY);
 		
 		
 		
@@ -248,15 +246,15 @@ public class GMImage implements ConfigurationWatcher,IImage {
 			return imageType;
 	}
 
-	@Override
-	public String getImageServer() {
-		return serverUrl;
-	}
-
-	@Override
-	public String getImageUploadUrl() {
-		return uploadUrl;
-	}
+//	@Override
+//	public String getImageServer() {
+//		return serverUrl;
+//	}
+//
+//	@Override
+//	public String getImageUploadUrl() {
+//		return uploadUrl;
+//	}
 	
 
 	

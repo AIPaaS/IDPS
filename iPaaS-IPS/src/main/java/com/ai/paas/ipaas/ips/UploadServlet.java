@@ -160,7 +160,7 @@ public class UploadServlet extends HttpServlet {
         				String fileId = dc.save(item.get(),item.getName());
                         jsono.put("name",fileId);
                         jsono.put("size", item.getSize());
-                        jsono.put("url", ImageUtil.getStaticDocUrl(fileId, "doc"));
+//                        jsono.put("url", ImageUtil.getStaticDocUrl(fileId, "doc"));
 //                        jsono.put("thumbnail_url", "UploadServlet?getthumb=" + item.getName());
                         jsono.put("delete_url", "UploadServlet?delfile=" + fileId);
                         jsono.put("delete_type", "GET");

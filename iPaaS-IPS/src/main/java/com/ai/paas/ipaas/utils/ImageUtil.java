@@ -198,73 +198,73 @@ public class ImageUtil {
 	 * @param name      图片名称 如：1.jpg  不要带路径
 	 * @return
 	 */
-	public static String upLoadImage(byte[] image,String name){
-		if(image == null)
-			return null;
-		if(image.length>5*1024*1024){
-			log.error("上传的图片大于5M!");
-			return null;
-		}
-		String id = null;
-		String upUrl = getUpImageUrl();
-		if(upUrl == null || upUrl.length() == 0){
-			log.error("请检查配置,上传图片的服务器地址。");
-			return null;
-		}
-		String result = HttpUtil.upImage(getUpImageUrl(), image,name);
-		Map<String ,String>  json  = GsonUtil.gsonToObject(result, Map.class);
-		if("success".equals(json.get("result"))){
-			id = json.get("id");
-		}
-		return id;
-	}
+//	public static String upLoadImage(byte[] image,String name){
+//		if(image == null)
+//			return null;
+//		if(image.length>5*1024*1024){
+//			log.error("上传的图片大于5M!");
+//			return null;
+//		}
+//		String id = null;
+//		String upUrl = getUpImageUrl();
+//		if(upUrl == null || upUrl.length() == 0){
+//			log.error("请检查配置,上传图片的服务器地址。");
+//			return null;
+//		}
+//		String result = HttpUtil.upImage(getUpImageUrl(), image,name);
+//		Map<String ,String>  json  = GsonUtil.gsonToObject(result, Map.class);
+//		if("success".equals(json.get("result"))){
+//			id = json.get("id");
+//		}
+//		return id;
+//	}
 	
 	/**获取图片服务器地址
 	 * @return
 	 */
-	public static String getImageServer(){
-		return getIntance().getImageServer();
-	}
-	
-	/**获取图片服务器地址--内网url
-	 * @return
-	 */
-	public static String getImageServerForIn(){
-		return getIntance().getImageUploadUrl();
-	}
+//	public static String getImageServer(){
+//		return getIntance().getImageServer();
+//	}
+//	
+//	/**获取图片服务器地址--内网url
+//	 * @return
+//	 */
+//	public static String getImageServerForIn(){
+//		return getIntance().getImageUploadUrl();
+//	}
 	
 	/**获取调用图片的url
 	 * @param imageId 图片id 例如53b0dfaf300418069bc01193，53b0dfaf300418069bc01193_100x100
 	 * @return
 	 */
-	public static String getImageUrl(String imageId){
-		return getImageServer()+"/image/"+imageId+getSupportType();
-	}
-	
-	/**获取调用文本、附件的url
-	 * @param id  文本、附件的id 例如：53b6a32d09a9797981973489
-	 * @param type 文本、附件的浏览类型，页面直接显示还是下载：doc是下载，html直接显示，为空直接显示
-	 * @return
-	 */
-	public static String getStaticDocUrl(String id,String type){
-		return getImageServer()+"/static/"+((StringUtils.isEmpty(type)||"html".equals(type))?"html/":"attch/")+id;
-	}
-	
-	/**获取商品缓存页面的url
-	 * @param id  商品ID
-	 * @param type 文本、附件的浏览类型，页面直接显示还是下载：doc是下载，html直接显示，为空直接显示
-	 * @return
-	 */
-	public static String getRemoveStaticUrl(String id){
-		return getImageServer()+"/removestatic/cacheService/removeCacheHtml/"+id;
-	}
-	
-	/**获取上传图片的url
-	 * @return
-	 */
-	public static String getUpImageUrl(){
-		return getImageServerForIn()+"/upImage";
-	}
+//	public static String getImageUrl(String imageId){
+//		return getImageServer()+"/image/"+imageId+getSupportType();
+//	}
+//	
+//	/**获取调用文本、附件的url
+//	 * @param id  文本、附件的id 例如：53b6a32d09a9797981973489
+//	 * @param type 文本、附件的浏览类型，页面直接显示还是下载：doc是下载，html直接显示，为空直接显示
+//	 * @return
+//	 */
+//	public static String getStaticDocUrl(String id,String type){
+//		return getImageServer()+"/static/"+((StringUtils.isEmpty(type)||"html".equals(type))?"html/":"attch/")+id;
+//	}
+//	
+//	/**获取商品缓存页面的url
+//	 * @param id  商品ID
+//	 * @param type 文本、附件的浏览类型，页面直接显示还是下载：doc是下载，html直接显示，为空直接显示
+//	 * @return
+//	 */
+//	public static String getRemoveStaticUrl(String id){
+//		return getImageServer()+"/removestatic/cacheService/removeCacheHtml/"+id;
+//	}
+//	
+//	/**获取上传图片的url
+//	 * @return
+//	 */
+//	public static String getUpImageUrl(){
+//		return getImageServerForIn()+"/upImage";
+//	}
 	
 	public static void main(String[] args) {
 		String fileStr = "/Users/liwenxian/Downloads/1103/test/dxf.jpg";
@@ -274,7 +274,7 @@ public class ImageUtil {
 			input = new FileInputStream(file);
 			byte[] bytes = new byte[input.available()];
 			input.read(bytes);
-			System.out.println(upLoadImage(bytes, "dxf.jpg"));
+//			System.out.println(upLoadImage(bytes, "dxf.jpg"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

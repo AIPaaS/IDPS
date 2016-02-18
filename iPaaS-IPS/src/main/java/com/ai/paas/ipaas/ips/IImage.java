@@ -128,9 +128,9 @@ public interface IImage {
 	/**获取图片服务器地址
 	 * @return
 	 */
-	String getImageServer();
-	/**获取图片服务器地址  上传时，使用内网URL
-	 * @return
-	 */
-	String getImageUploadUrl();
+//	String getImageServer();
+//	/**获取图片服务器地址  上传时，使用内网URL
+//	 * @return
+//	 */
+//	String getImageUploadUrl();
 }

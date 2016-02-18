@@ -42,8 +42,8 @@ public class GMClient {
     private static final String MAX_IDLE_KEY = "maxIdle";
     private static final String TEST_ON_BORROW_KEY = "testOnBorrow";
     private static final String TEST_ON_RETURN_KEY = "testOnReturn";
-    private static final String IMAGE_ROOT = "imageRoot";
-    private static final String IMAGE_ROOT_NEW = "imageRootNew";
+    private static final String IMAGE_ROOT = "upPath";
+    private static final String IMAGE_ROOT_NEW = "upPathNew";
     private static final String IMAGE_NAME_SPLIT = "imageNameSplit";
     private static final String EXTENT_KEY = "extent";
     private static final String QUALITY_KEY = "quality";

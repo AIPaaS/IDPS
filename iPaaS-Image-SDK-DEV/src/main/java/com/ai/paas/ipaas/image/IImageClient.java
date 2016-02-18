@@ -19,6 +19,7 @@ public interface IImageClient {
 	 */
     String upLoadImage(byte[] image,String name);
     
+    
     /**
      * 
      * @return 返回图片服务器外网地址
@@ -45,6 +46,8 @@ public interface IImageClient {
      */
     String getUpImageUrl();
     
+    
+    boolean deleteImaget(String imageId);
     
     /**
      * 下载图片

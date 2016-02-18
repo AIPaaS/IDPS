@@ -35,6 +35,7 @@ import com.ai.paas.ipaas.ips.service.IImageService;
 import com.ai.paas.ipaas.ips.service.impl.ImageSvImpl;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.utils.ImageUtil;
+import com.ai.paas.ipaas.utils.PaasException;
 import com.google.gson.Gson;
 
 
@@ -78,7 +79,7 @@ public class ImageServlet extends HttpServlet {
 
 	@Override
 	public void service(ServletRequest req, ServletResponse res)
-			throws ServletException, IOException {
+			throws ServletException, IOException  {
 		
 		long begin = System.currentTimeMillis();
 		HttpServletRequest request = (HttpServletRequest)req;
@@ -88,6 +89,9 @@ public class ImageServlet extends HttpServlet {
         String ipsServiceId = request.getParameter("serviceId");
         if(dssServiceId==null){
         	List<IdpsInstanceBandDss> dsslist = iImageService.srarchDssInfo(userId, ipsServiceId);
+        	if(dsslist.size()==0 ){
+					throw new ServletException("No config DSS info!");
+        	}
         	IdpsInstanceBandDss dss = dsslist.get(0);
         	userPid =dss.getDssPid();
     		dssServicePwd = dss.getDssServicePwd();
@@ -96,7 +100,7 @@ public class ImageServlet extends HttpServlet {
         String authAdd = config.getFieldValue();
 		String uri = request.getRequestURI(); 
 		configInfo.setAuthUrl(authAdd);
-		ImageUtil util = new ImageUtil(gson.toJson(configInfo),userPid,dssServicePwd,dssServiceId);
+		ImageUtil util = new ImageUtil(gson.toJson(configInfo),userPid, dssServicePwd,dssServiceId);
 		log.debug(uri+"--service------------------");
 		String imageType = getImageType(uri); 
 		if(!util.supportService(imageType)){
@@ -105,11 +109,11 @@ public class ImageServlet extends HttpServlet {
 		}
 		String imageName = getImageName(uri);
 		
-		if(isCachedByIE(request,response,imageName)){
-			log.debug(uri+"--return 304------------------ok");
-			//已被浏览器缓存，服务端没有修改，只需要返回304
-			return;
-		}
+//		if(isCachedByIE(request,response,imageName)){
+//			log.debug(uri+"--return 304------------------ok");
+//			//已被浏览器缓存，服务端没有修改，只需要返回304
+//			return;
+//		}
 		if(util.getGMMode()){
 			String imageSize = null;
 			boolean isExtent = false;
@@ -146,6 +150,7 @@ public class ImageServlet extends HttpServlet {
 	     			in = new FileInputStream(file);       
 	     			if(in != null)
 	     				response.setIntHeader("Content-Length", in.available());
+	     			response.setStatus(503);
 	     			outStream = response.getOutputStream();
 	     			byte[] data = new byte[2048];
 	    			int count = -1;  

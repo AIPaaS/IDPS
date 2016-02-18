@@ -7,13 +7,9 @@ public class IdpsConfigInfo {
 
     private String gmPath;
 
-    private String imageRoot;
-
     private String imageNameSplit;
 
     private String imageType;
-
-    private String imageRootNew;
 
     private String maxActive;
 
@@ -25,23 +21,17 @@ public class IdpsConfigInfo {
 
     private String testOnReturn;
 
-    private String reserveImage;
-
     private String extent;
 
     private String quality;
 
     private String commandSize;
 
-    private String serverUrl;
-
-    private String uploadUrl;
-
-    private String authUrl;
-
     private String upPath;
 
     private String upPathNew;
+    
+    private String authUrl;
 
     public Integer getId() {
         return id;
@@ -67,14 +57,6 @@ public class IdpsConfigInfo {
         this.gmPath = gmPath == null ? null : gmPath.trim();
     }
 
-    public String getImageRoot() {
-        return imageRoot;
-    }
-
-    public void setImageRoot(String imageRoot) {
-        this.imageRoot = imageRoot == null ? null : imageRoot.trim();
-    }
-
     public String getImageNameSplit() {
         return imageNameSplit;
     }
@@ -89,14 +71,6 @@ public class IdpsConfigInfo {
 
     public void setImageType(String imageType) {
         this.imageType = imageType == null ? null : imageType.trim();
-    }
-
-    public String getImageRootNew() {
-        return imageRootNew;
-    }
-
-    public void setImageRootNew(String imageRootNew) {
-        this.imageRootNew = imageRootNew == null ? null : imageRootNew.trim();
     }
 
     public String getMaxActive() {
@@ -139,14 +113,6 @@ public class IdpsConfigInfo {
         this.testOnReturn = testOnReturn == null ? null : testOnReturn.trim();
     }
 
-    public String getReserveImage() {
-        return reserveImage;
-    }
-
-    public void setReserveImage(String reserveImage) {
-        this.reserveImage = reserveImage == null ? null : reserveImage.trim();
-    }
-
     public String getExtent() {
         return extent;
     }
@@ -171,30 +137,6 @@ public class IdpsConfigInfo {
         this.commandSize = commandSize == null ? null : commandSize.trim();
     }
 
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
-        this.serverUrl = serverUrl == null ? null : serverUrl.trim();
-    }
-
-    public String getUploadUrl() {
-        return uploadUrl;
-    }
-
-    public void setUploadUrl(String uploadUrl) {
-        this.uploadUrl = uploadUrl == null ? null : uploadUrl.trim();
-    }
-
-    public String getAuthUrl() {
-        return authUrl;
-    }
-
-    public void setAuthUrl(String authUrl) {
-        this.authUrl = authUrl == null ? null : authUrl.trim();
-    }
-
     public String getUpPath() {
         return upPath;
     }
@@ -210,4 +152,14 @@ public class IdpsConfigInfo {
     public void setUpPathNew(String upPathNew) {
         this.upPathNew = upPathNew == null ? null : upPathNew.trim();
     }
+
+	public String getAuthUrl() {
+		return authUrl;
+	}
+
+	public void setAuthUrl(String authUrl) {
+		this.authUrl = authUrl;
+	}
+    
+    
 }

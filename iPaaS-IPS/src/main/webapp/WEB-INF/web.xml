@@ -67,6 +67,17 @@
         <servlet-class>com.ai.paas.ipaas.ips.UploadServlet</servlet-class>
     </servlet>
     
+    <servlet-mapping>
+        <servlet-name>DeleteImageServlet</servlet-name>
+        <url-pattern>/deleteImage</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description/>
+        <display-name>DeleteImageServlet</display-name>
+        <servlet-name>DeleteImageServlet</servlet-name>
+        <servlet-class>com.ai.paas.ipaas.ips.DeleteImageServlet</servlet-class>
+    </servlet>
+    
 	
 	<welcome-file-list>
 		<welcome-file>/index.jsp</welcome-file>

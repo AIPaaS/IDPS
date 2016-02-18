@@ -11,9 +11,9 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.paas.ipaas.utils.HttpUtil;
@@ -100,10 +100,16 @@ public class ImageClientImpl implements IImageClient{
 		return in;
 	}
 	
+	public boolean deleteImaget(String imageId){
+		String deleteUrl = imageUrl+"/deleteImage?imageId="+imageId+"&userId"+userId+"&serviceId="+serviceId;
+		HttpClient client = new HttpClient();
+		GetMethod httpGet = new GetMethod(deleteUrl);
+		return true ;
+	}
 	
 	public String getImageUrl(String imageId,String imageType){
 		
-		return imageUrl+"/image/"+imageId+imageType+"?userId="+userId+"&serviceId="+serviceId;
+		return imageUrlOut+"/image/"+imageId+imageType+"?userId="+userId+"&serviceId="+serviceId;
 	}
 	
 	public  String getUpImageUrl(){

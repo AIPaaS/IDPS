@@ -113,7 +113,7 @@ public class UpImageServlet extends HttpServlet {
 			in = request.getInputStream();
 			filename = request.getHeader("filename");
 			
-			File f1 = new File(configInfo.getImageRoot(), filename);
+			File f1 = new File(configInfo.getUpPath(), filename);
 			fos = new FileOutputStream(f1);
 			byte[] buffer = new byte[1024];
 			int bytes = 0;
