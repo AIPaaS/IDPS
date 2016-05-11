@@ -12,22 +12,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class HttpUtil {
-	private static int connectionTimeout = 10000;
+	private static int connectionTimeout = 60000;
 
-	private static int readTimeout = 10000;
+	private static int readTimeout = 60000;
 
 	private static final Log logger = LogFactory.getLog(HttpUtil.class);
 
 	/**
 	 * 图片服务器 上传图片
+	 * 
 	 * @param url
 	 * @return
 	 */
-	public static String upImage(String url,
-			byte[] image,String name) {
+	public static String upImage(String url, byte[] image, String name) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
-		String result = "";
+		String result = null;
 
 		try {
 			if (logger.isDebugEnabled()) {
@@ -39,86 +39,48 @@ public class HttpUtil {
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-//			connection.setChunkedStreamingMode(1024*1024); 
 			connection.setReadTimeout(readTimeout);
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
-			connection.setRequestProperty("Content-Type","multipart/form-data;file="+name);
-			connection.setRequestProperty("filename",name);
+			connection.setRequestProperty("Content-Type",
+					"multipart/form-data;file=" + name);
+			connection.setRequestProperty("filename", name);
 
-			DataOutputStream printout = new DataOutputStream(
+			DataOutputStream out = new DataOutputStream(
 					connection.getOutputStream());
 
-			printout.write(image);
-			printout.flush();
-			printout.close();
-
-			in = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
-			String s = null;
-			while ((s = in.readLine()) != null) {
-				result += s;
-			}
-			if (logger.isDebugEnabled()) {
-				logger.debug("Finished sending message to" + url);
+			out.write(image);
+			out.flush();
+			out.close();
+			if (200 == connection.getResponseCode()) {
+				in = new BufferedReader(new InputStreamReader(
+						connection.getInputStream()));
+				String s = null;
+				while ((s = in.readLine()) != null) {
+					result += s;
+				}
+				if (logger.isDebugEnabled()) {
+					logger.debug("Finished sending message to" + url);
+				}
 			}
 			return result;
 		} catch (SocketTimeoutException e) {
 			logger.warn("Socket Timeout Detected while attempting to send message to ["
 					+ url + "].");
 		} catch (Exception e) {
-			logger.error(e, e);
+			logger.error(e.getMessage(), e);
 		} finally {
 			if (in != null)
 				try {
 					in.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("", e);
 				}
 			if (connection != null)
 				connection.disconnect();
 		}
 		return null;
 	}
-	
-	/**
-	 * solr引擎更新索引
-	 * @param url
-	 * @return
-	 */
-	public static boolean updateIndx(String url) {
-		HttpURLConnection connection = null;
-
-		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Attempting to access " + url);
-			}
-			URL logoutUrl = new URL(url);
-
-			connection = (HttpURLConnection) logoutUrl.openConnection();
-			connection.setDoInput(true);
-			connection.setDoOutput(true);
-			connection.setRequestMethod("POST");
-			connection.setReadTimeout(readTimeout);
-			connection.setConnectTimeout(connectionTimeout);
-			connection.setRequestProperty("Charsert", "UTF-8");
-			connection.setRequestProperty("Content-Type","text/html");
-			
-			int code = connection.getResponseCode();
-			return code == 200;
-		} catch (SocketTimeoutException e) {
-			logger.warn("Socket Timeout Detected while attempting to send message to ["
-					+ url + "].");
-		} catch (Exception e) {
-			logger.error(e, e);
-		} finally {
-			if (connection != null)
-				connection.disconnect();
-		}
-		return false;
-	}
-	
-	
 
 }

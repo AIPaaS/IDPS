@@ -19,122 +19,117 @@ import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.uac.vo.AuthResult;
 import com.ai.paas.ipaas.util.Assert;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-
 
 public class ImageClientFactory {
-//	private static ISearchClient iSearchClient;
-	private static transient final Logger log = LoggerFactory.getLogger(ImageClientFactory.class);
+	private static transient final Logger log = LoggerFactory
+			.getLogger(ImageClientFactory.class);
 	private static Map<String, IImageClient> imageClients = new ConcurrentHashMap<String, IImageClient>();
 	private final static String SEARCH_CONFIG_PATH = "/IDPS/";
 	public static final String IMAGE_URL_PATH = "IMAGEURL";
 	public static final String IMAGE_URL_OUT_PATH = "/IMAGEURL_OUT";
-	private final static String ELASTIC_HOST = "hosts";
-	private final static String ELASTIC_MAPPING = "mapping";
-	
+
 	private ImageClientFactory() {
 
 	}
+
 	@SuppressWarnings("unchecked")
-	public  static IImageClient getSearchClient(AuthDescriptor ad) throws Exception {
-		IImageClient iImageClient =null;
+	public static IImageClient getClient(AuthDescriptor ad) throws Exception {
+		IImageClient iImageClient = null;
 		Gson gson = new Gson();
 		log.info("Check Formal Parameter AuthDescriptor ...");
-		Assert.notNull(ad, "AuthDescriptor对象为空");
-		Assert.notNull(ad.getServiceId(), "service_id为空");
+		Assert.notNull(ad, "AuthDescriptor is blank");
+		Assert.notNull(ad.getServiceId(), "service_id is blank");
 		String srvId = ad.getServiceId();
 		String userPid = ad.getPid();
-		if(imageClients.containsKey(userPid+"_"+srvId)) {
-			iImageClient = imageClients.get(userPid+"_"+srvId);
+		if (imageClients.containsKey(userPid + "_" + srvId)) {
+			iImageClient = imageClients.get(userPid + "_" + srvId);
 			return iImageClient;
 		}
 		AuthResult authResult = UserClientFactory.getUserClient().auth(ad);
-		Assert.notNull(authResult.getUserId(), "UserId为空");
-//		// 开始初始化
-		Assert.notNull(authResult.getConfigAddr(), "ConfigAddr为空");
-		Assert.notNull(authResult.getConfigUser(), "ConfigUser为空");
-		Assert.notNull(authResult.getConfigPasswd(), "ConfigPasswd为空");
-//		// 获取内部zk地址后取得该用户的cache配置信息，返回JSON String
-//		// 获取该用户申请的cache服务配置信息
+		Assert.notNull(authResult.getUserId(), "UserId is blank");
+		// // 开始初始化
+		Assert.notNull(authResult.getConfigAddr(), "ConfigAddr is blank");
+		Assert.notNull(authResult.getConfigUser(), "ConfigUser is blank");
+		Assert.notNull(authResult.getConfigPasswd(), "ConfigPasswd is blank");
+		// // 获取内部zk地址后取得该用户的cache配置信息，返回JSON String
+		// // 获取该用户申请的cache服务配置信息
 		log.info("Get confBase&conf ...");
 		String userId = authResult.getUserId();
-		ICCSComponent client = CCSComponentFactory.getConfigClient(authResult.getConfigAddr(), 
-				authResult.getConfigUser(),authResult.getConfigPasswd());
-		
-		
-		
-		String imageConfig = CCSComponentFactory.getConfigClient(authResult.getConfigAddr(), 
-				authResult.getConfigUser(),authResult.getConfigPasswd()).get(SEARCH_CONFIG_PATH+srvId);
-		Map<String,String> configM = new HashMap<String,String>();
+		ICCSComponent client = CCSComponentFactory.getConfigClient(
+				authResult.getConfigAddr(), authResult.getConfigUser(),
+				authResult.getConfigPasswd());
+
+		String imageConfig = CCSComponentFactory.getConfigClient(
+				authResult.getConfigAddr(), authResult.getConfigUser(),
+				authResult.getConfigPasswd()).get(SEARCH_CONFIG_PATH + srvId);
+		Map<String, String> configM = new HashMap<String, String>();
 		configM = gson.fromJson(imageConfig, configM.getClass());
 		String imageUrl = configM.get(IMAGE_URL_PATH);
-//		String imageUrl = "http://10.1.235.199:8086/iPaas-IDPS";
-		IDPSWatch watch = new IDPSWatch(client, userPid, userId,  srvId,imageUrl);
-		String imageUrlOutM = CCSComponentFactory.getConfigClient(authResult.getConfigAddr(), 
-				authResult.getConfigUser(),authResult.getConfigPasswd()).get(SEARCH_CONFIG_PATH+srvId+IMAGE_URL_OUT_PATH,watch);
-		
-		Map<String,String> configMO = new HashMap<String,String>();
-		configMO = gson.fromJson(imageUrlOutM, configMO.getClass());
-		
+		// String imageUrl = "http://10.1.235.199:8086/iPaas-IDPS";
+		IDPSWatch watch = new IDPSWatch(client, userPid, userId, srvId,
+				imageUrl);
+		String imageUrlOutM = CCSComponentFactory.getConfigClient(
+				authResult.getConfigAddr(), authResult.getConfigUser(),
+				authResult.getConfigPasswd()).get(
+				SEARCH_CONFIG_PATH + srvId + IMAGE_URL_OUT_PATH, watch);
+
+		Map<String, String> configMO = new HashMap<String, String>();
+		configMO = gson.fromJson(imageUrlOutM, Map.class);
+
 		String imageUrlOut = configMO.get(IMAGE_URL_PATH);
-		iImageClient = new ImageClientImpl(userId,srvId,imageUrl,imageUrlOut);
-		imageClients.put(userPid+"_"+srvId, iImageClient);
+		iImageClient = new ImageClientImpl(userId, srvId, imageUrl, imageUrlOut);
+		imageClients.put(userPid + "_" + srvId, iImageClient);
 		return iImageClient;
 	}
-	
-	
-	
-	private static class IDPSWatch extends ConfigWatcher{
+
+	/**
+	 * 
+	 * 监听外网地址变化，随时更新客户端
+	 *
+	 */
+	private static class IDPSWatch extends ConfigWatcher {
 		private ICCSComponent client;
 		private String userPid;
 		private String userId;
 		private String serviceId;
 		private String imageUrl;
-		
-		public IDPSWatch(ICCSComponent client,String userPid,String userId,String serviceId,String imageUrl){
+
+		public IDPSWatch(ICCSComponent client, String userPid, String userId,
+				String serviceId, String imageUrl) {
 			this.client = client;
 			this.serviceId = serviceId;
 			this.userPid = userPid;
 			this.userId = userId;
 			this.imageUrl = imageUrl;
 		}
-		
-		@SuppressWarnings("unchecked")
+
 		@Override
 		public void processEvent(ConfigWatcherEvent event) {
 			if (event == null)
 				return;
 			// 事件类型
 			EventType eventType = event.getType();
-			if (EventType.NodeDataChanged == eventType){
+			if (EventType.NodeDataChanged == eventType) {
 				log.info("------monitor--投票结果------NodeDataChanged--------");
-				try{
-					//循环watch
-					
-					IImageClient iImageClient =null;
-					
-					String imageUrlOut =client.get(SEARCH_CONFIG_PATH+serviceId+IMAGE_URL_OUT_PATH,this);
-					iImageClient = new ImageClientImpl(userId,serviceId,imageUrl,imageUrlOut);
-					imageClients.put(userPid+"_"+serviceId, iImageClient);
+				try {
+					// 循环watch
+
+					IImageClient iImageClient = null;
+
+					String imageUrlOut = client.get(SEARCH_CONFIG_PATH
+							+ serviceId + IMAGE_URL_OUT_PATH, this);
+					iImageClient = new ImageClientImpl(userId, serviceId,
+							imageUrl, imageUrlOut);
+					imageClients.put(userPid + "_" + serviceId, iImageClient);
 				} catch (PaasException e) {
-					log.error("投票结果变化时，读取出错："+e.getMessage(),e);
+					log.error("投票结果变化时，读取出错：" + e.getMessage(), e);
 				}
-			}else{
-				log.info("---eventType---FinalWatch--"+eventType);
+			} else {
+				log.info("---eventType---FinalWatch--" + eventType);
 			}
-			
+
 		}
 
-		
 	}
-	
-	
-	
-	
+
 }
-
-
-
-
-
