@@ -102,7 +102,7 @@ public class UpImageServlet extends HttpServlet {
 		List<IdpsConfigInfo> list =  iImageService.search();
 		IdpsConfigInfo configInfo = list.get(0);
 		configInfo.setAuthUrl(config.getFieldValue());
-		ImageUtil util = new ImageUtil(gson.toJson(configInfo),userPid,dssServiceId,dssServicePwd);
+		ImageUtil util = new ImageUtil(gson.toJson(configInfo),userPid,dssServicePwd,dssServiceId);
 		Gson json = new Gson();
 		Map map = new HashMap(); 
 		log.debug("----保存本地图片----------------");
