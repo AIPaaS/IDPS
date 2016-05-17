@@ -110,11 +110,11 @@ public class ImageServlet extends HttpServlet {
 		}
 		String imageName = getImageName(uri);
 		
-//		if(isCachedByIE(request,response,imageName)){
-//			log.debug(uri+"--return 304------------------ok");
-//			//已被浏览器缓存，服务端没有修改，只需要返回304
-//			return;
-//		}
+		if(isCachedByIE(request,response,imageName)){
+			log.debug(uri+"--return 304------------------ok");
+			//已被浏览器缓存，服务端没有修改，只需要返回304
+			return;
+		}
 		if(util.getGMMode()){
 			String imageSize = null;
 			boolean isExtent = false;
