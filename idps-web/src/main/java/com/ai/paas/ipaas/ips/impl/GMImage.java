@@ -160,6 +160,7 @@ public class GMImage implements ConfigurationWatcher,IImage {
 		imageRoot = jsonObj.get(IMAGE_ROOT);
 		imageRootNew = jsonObj.get(IMAGE_ROOT_NEW);
 		imageNameSplit = jsonObj.get(IMAGE_NAME_SPLIT);
+		imageType = jsonObj.get(IMAGE_TYPE);
 		if(imageType==null||"".equals(imageType)){
 			types = Arrays.asList(new String[]{".jpg"});
 		}else{
