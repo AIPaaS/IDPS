@@ -102,7 +102,8 @@ public class ImageServlet extends HttpServlet {
 		configInfo.setAuthUrl(authAdd);
 		ImageUtil util = new ImageUtil(gson.toJson(configInfo),userPid, dssServicePwd,dssServiceId);
 		log.debug(uri+"--service------------------");
-		String imageType = getImageType(uri); 
+		String imageType = getImageType(uri);
+		log.debug(uri+"-------imageType is ["+imageType+"]-------------");
 		if(!util.supportService(imageType)){
 			log.error(uri+"--service------------------资源格式不支持");
 			return;
