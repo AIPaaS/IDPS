@@ -27,7 +27,7 @@ public class HttpUtil {
 	public static String upImage(String url, byte[] image, String name) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
-		String result = null;
+		String result = "";
 
 		try {
 			if (logger.isDebugEnabled()) {
