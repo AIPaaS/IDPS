@@ -5,7 +5,7 @@ FROM centos:7
 
 RUN mkdir pkg
 ADD ./pkg/GraphicsMagick-1.3.23.tar.gz /pkg/GraphicsMagick-1.3.23.tar.gz
-RUN cd /pkg && tar -xvf GraphicsMagick-1.3.23.tar.gz && cd /pkg/GraphicsMagick-1.3.23
+RUN cd /pkg/GraphicsMagick-1.3.23
 
 #install image libs
 RUN yum install -y libpng-devel libpng libjpeg libjpeg-devel libpng libpng-devel libtiff-devel libtiff \
