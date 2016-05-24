@@ -5,21 +5,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
  	
  	
- 	<display-name>iPaaS-IPS</display-name>
+ 	<display-name>iPaaS-IDPS</display-name>
 	<context-param>
 		<param-name>appName</param-name>
-		<param-value>iPaas-IPS</param-value>
+		<param-value>iPaas-IDPS</param-value>
 	</context-param>
-	
-	<servlet>
-		<servlet-name>htmlServer</servlet-name>
-		<servlet-class>com.ai.paas.image.StaticHtmlServlet</servlet-class>
-		<load-on-startup>-1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>htmlServer</servlet-name>
-		<url-pattern>/static/*</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>imageServer</servlet-name>
@@ -31,29 +21,15 @@
 		<url-pattern>/image/*</url-pattern>
 	</servlet-mapping>
 	
+	
 	<servlet>
-		<servlet-name>springmvc</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>
-				classpath*:common/springmvc-servlet.xml
-        	</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>springmvc</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping> 
-	<servlet>
-		<servlet-name>UpImageServlet</servlet-name>
-		<servlet-class>com.ai.paas.ipaas.ips.UpImageServlet</servlet-class>
+		<servlet-name>UploadImageServlet</servlet-name>
+		<servlet-class>com.ai.paas.ipaas.ips.UploadImageServlet</servlet-class>
 		<load-on-startup>-1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>UpImageServlet</servlet-name>
-		<url-pattern>/upImage</url-pattern>
+		<servlet-name>UploadImageServlet</servlet-name>
+		<url-pattern>/uploadImage</url-pattern>
 	</servlet-mapping>
 	
 	<servlet-mapping>
