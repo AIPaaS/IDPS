@@ -14,6 +14,7 @@ sourceCompatibility = 1.7
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
     
 checkstyleMain {
@@ -101,7 +102,8 @@ sourceSets {
 
 ext {
 	moduleName="iPaas-IDPS";
-	moduleVersion="0.1-SNAPSHOT"
+	moduleVersion="0.3-SNAPSHOT"
+	//moduleVersion="0.3"
 	publishUserName = "devadm"
 	publishUserPassword = "Devadm@1212"
 	publishURL="http://10.1.228.199:18081/nexus/content/repositories/snapshots/"
@@ -111,61 +113,30 @@ ext {
 group = 'com.ai'
 
 dependencies{
-	compile 'com.ai:ipaas-common:0.1-SNAPSHOT'
-	compile 'com.ai:ipaas-base:0.1-SNAPSHOT'
+	compile 'com.ai:ipaas-common:0.3'
+	compile 'com.ai:ipaas-ccs:0.3'
 	compile "jstl:jstl:1.2"
-	compile "org.springframework:spring-web:4.1.6.RELEASE"
-	compile "org.springframework:spring-webmvc:4.1.6.RELEASE"
-	compile "org.springframework:spring-context-support:4.1.6.RELEASE"
-	compile ("com.alibaba:dubbox:2.8.3") {
-		exclude group: 'org.springframework', module: 'spring'
-	}
-	compile ("com.101tec:zkclient:0.4") {
-		exclude group: 'org.apache.zookeeper', module: 'zookeeper'
-		exclude group: 'log4j', module: 'log4j'
-	}
 	compile 'org.apache.zookeeper:zookeeper:3.4.6'
-//	compile 'org.restlet.jee:org.restlet:2.2.1'
-	compile 'commons-httpclient:commons-httpclient:3.0'
 	
 	compile "javax.servlet:javax.servlet-api:3.1.0"
 	compile "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
 	
 	
-	compile "org.mongodb:mongo-java-driver:3.1.0"
+	compile "org.mongodb:mongo-java-driver:3.2.0"
 	compile 'org.javassist:javassist:3.19.0-GA'
 
-	// restful
-	compile 'org.jboss.resteasy:resteasy-jaxrs:3.0.11.Final'
-	compile 'org.jboss.resteasy:resteasy-client:3.0.11.Final'
-	compile 'org.jboss.resteasy:resteasy-jackson-provider:3.0.11.Final'
-	compile 'org.apache.tapestry:tapestry-kaptcha:5.4-SNAPSHOT'
-	compile 'org.apache.httpcomponents:httpclient:4.4.1'
+	compile 'com.ai:ipaas-dss:0.3-SNAPSHOT'
 	
-	
-	compile 'com.ai:ipaas-dss:0.2-SNAPSHOT'
-	
-	testCompile "org.springframework:spring-test:4.1.6.RELEASE"
 	testCompile "junit:junit:4.11"
 	
-	compile 'org.apache.tomcat:tomcat-jdbc:7.0.29'
-	compile 'org.apache.tomcat:tomcat-juli:7.0.29'
-	compile "com.ai:ipaas-agent-client:0.1-SNAPSHOT"
 	compile 'commons-fileupload:commons-fileupload:1.3.1'
-	compile 'commons-httpclient:commons-httpclient:3.0'
-	compile 'commons-codec:commons-codec:1.9'
-	compile 'commons-logging:commons-logging:1.2.1-SNAPSHOT'
-	
 	
 	compile "com.sharneng:gm4java:1.1.0"
-	
-	compile "org.apache.commons:commons-dbcp2:2.1"
-	compile "com.oracle:ojdbc14:10.2.0.4.0"
 	
 }
 
 war {
-    baseName = "iPaas-IDPS"
+    baseName = "iPaaS-IDPS"
 }
 
 jar {
