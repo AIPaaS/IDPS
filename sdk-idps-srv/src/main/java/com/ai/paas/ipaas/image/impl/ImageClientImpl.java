@@ -133,6 +133,11 @@ public class ImageClientImpl implements IImageClient {
 		return imageUrlInter + "/image/" + imageId + imageType + "?userId="
 				+ userId + "&serviceId=" + serviceId;
 	}
+	
+	public String getImageUrl(String imageId, String imageType, String imageScale) {
+		return imageUrlInter + "/image/" + imageId +"_"+ imageScale + imageType + "?userId="
+				+ userId + "&serviceId=" + serviceId;
+	}
 
 	public String getImageUploadUrl() {
 		return imageUrl + "/upImage";
