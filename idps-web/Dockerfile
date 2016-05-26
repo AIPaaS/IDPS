@@ -27,7 +27,7 @@ RUN  mv /pkg/apache-tomcat-8.0.35/apache-tomcat-8.0.35 /opt/apache-tomcat-8.0.35
 RUN sed -i '/\# OS/i JAVA_OPTS="$JAVA_OPTS -server -Xms512M -Xmx512M -XX:PermSize=64M -XX:MaxPermSize=128M  -XX:+UseConcMarkSweepGC -XX:ParallelGCThreads=8 -XX:+PrintCommandLineFlags -XX:+PrintGCDetails -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+HeapDumpOnOutOfMemoryError" \n if [[ "$JAVA_OPTS" != *-Djava.security.egd=* ]]; then \n   JAVA_OPTS="$JAVA_OPTS -Djava.security.egd=file:/dev/./urandom" \n  fi'  /opt/apache-tomcat-8.0.35/bin/catalina.sh
 RUN rm -fr /opt/apache-tomcat-8.0.35/webapps/*
 
-COPY ./build/libs/iPaaS-IDPS.war /opt/apache-tomcat-8.0.35/webapps/idps.war
+COPY ./build/libs/iPaaS-IDPS.war /opt/apache-tomcat-8.0.35/webapps/iPaas-IDPS.war
 
 ENV CATALINA_HOME /opt/apache-tomcat-8.0.35  
 ENV PATH $PATH:$CATALINA_HOME/bin:/opt/freeware/GraphicsMagick-1.3.23/bin  

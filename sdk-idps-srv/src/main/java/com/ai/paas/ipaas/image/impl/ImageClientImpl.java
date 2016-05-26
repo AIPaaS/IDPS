@@ -161,7 +161,7 @@ public class ImageClientImpl implements IImageClient {
 	}
 
 	public String getImageUploadUrl() {
-		return imageUrl + "/upImage";
+		return imageUrl + "/uploadImage";
 	}
 
 	@Override
