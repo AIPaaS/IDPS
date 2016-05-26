@@ -38,6 +38,19 @@ public interface IImageClient {
 	 * @return
 	 */
 	public String getImageUrl(String imageId, String imageType);
+	
+	/**
+	 * 根据图片id 图片类型获取图片内网地址
+	 * 
+	 * @param imageId
+	 *            图片id
+	 * @param imageType
+	 *            例如:.jpg .png
+	 *  @param imageScale
+	 *            例如:.800x800      
+	 * @return
+	 */
+	public String getImageUrl(String imageId, String imageType, String imageScale);
 
 	/**
 	 * 获取图片上传地址---- 内网

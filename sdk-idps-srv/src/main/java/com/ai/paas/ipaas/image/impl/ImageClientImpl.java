@@ -128,9 +128,35 @@ public class ImageClientImpl implements IImageClient {
 
 	}
 
+	private String imageTypeFormat(String imageType) {
+		if (imageType !=null && imageType.startsWith(".")==false) {
+			imageType = "." + imageType;
+		}
+		switch (imageType) {
+		case ".JPG":
+			imageType = ".jpg";
+			break;
+		case ".PNG":
+			imageType = ".png";
+			break;
+		default:
+		}
+		
+		return imageType;
+	}
+	
 	public String getImageUrl(String imageId, String imageType) {
-
+		imageType = imageTypeFormat(imageType);
 		return imageUrlInter + "/image/" + imageId + imageType + "?userId="
+				+ userId + "&serviceId=" + serviceId;
+	}
+	
+	public String getImageUrl(String imageId, String imageType, String imageScale) {
+		imageType = imageTypeFormat(imageType);
+		if (imageScale != null && imageScale.contains("X")) {
+			imageScale = imageScale.replace("X","x");
+		}
+		return imageUrlInter + "/image/" + imageId +"_"+ imageScale + imageType + "?userId="
 				+ userId + "&serviceId=" + serviceId;
 	}
 
