@@ -14,7 +14,7 @@
 	<servlet>
 		<servlet-name>imageServer</servlet-name>
 		<servlet-class>com.ai.paas.ipaas.ips.ImageServlet</servlet-class>
-		<load-on-startup>-1</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>imageServer</servlet-name>
@@ -25,7 +25,7 @@
 	<servlet>
 		<servlet-name>UploadImageServlet</servlet-name>
 		<servlet-class>com.ai.paas.ipaas.ips.UploadImageServlet</servlet-class>
-		<load-on-startup>-1</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UploadImageServlet</servlet-name>
