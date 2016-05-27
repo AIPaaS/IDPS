@@ -13,13 +13,13 @@ import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 
 public class ImageTest {
 
-	private static final String AUTH_ADDR = "http://10.1.228.198:14821/iPaas-Auth/service/auth";
+	private static final String AUTH_ADDR = "http://10.1.228.200:14105/service-portal-uac-web/service/auth";
 	private static AuthDescriptor ad = null;
 	private static IImageClient im = null;
 
 	static {
-		ad = new AuthDescriptor(AUTH_ADDR, "FFF49D0D518948D0AB28D7A8EEE25D03",
-				"111111", "IDPS023");
+		ad = new AuthDescriptor(AUTH_ADDR, "0A8111DB280044528DF309D501DFFF6A",
+				"123456", "IDPS015");
 		try {
 			im = ImageClientFactory.getClient(ad);
 		} catch (Exception e) {
@@ -34,7 +34,7 @@ public class ImageTest {
 		byte[] buffer = null;
 		try {
 			File file = new File(
-					"C:\\Users\\Administrator.5IVEXBVEXVTUU2T\\Desktop\\011ca5914f6fdd0d0db345e0.jpg");
+					"d:/004.jpg");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -50,7 +50,7 @@ public class ImageTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String id = im.upLoadImage(buffer, "011ca5914f6fdd0d0db345e0.jpg");
+		String id = im.upLoadImage(buffer, "004.jpg");
 
 		System.out.println(id);
 	}
