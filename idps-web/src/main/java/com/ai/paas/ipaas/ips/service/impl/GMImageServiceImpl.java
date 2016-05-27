@@ -27,6 +27,8 @@ public class GMImageServiceImpl implements IImageService {
 
 	private static final String GM_MODE_KEY = "gmMode";
 	private static final String RESERVE_IMAGE_KEY = "reserveImage";
+	private static final String UPLOAD_PATH_KEY = "srcPath";
+	private static final String DEST_PATH_KEY = "targetPath";
 
 	// 图片格式 .jpg等
 	private String imageType = null;
@@ -61,7 +63,7 @@ public class GMImageServiceImpl implements IImageService {
 		processConfig();
 	}
 
-	public GMImageServiceImpl(AuthDescriptor ad)  {
+	public GMImageServiceImpl(AuthDescriptor ad) {
 		init(ad);
 	}
 
@@ -118,7 +120,8 @@ public class GMImageServiceImpl implements IImageService {
 		}
 		gmMode = json.get(GM_MODE_KEY).getAsBoolean();
 		reserveImage = json.get(RESERVE_IMAGE_KEY).getAsString();
-
+		uploadPath = json.get(UPLOAD_PATH_KEY).getAsString();
+		destPath = json.get(DEST_PATH_KEY).getAsString();
 		if (log.isInfoEnabled()) {
 			log.info("gm config info is changed to " + config);
 		}
