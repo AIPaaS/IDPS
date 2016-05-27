@@ -60,7 +60,12 @@ public class ImageTest {
 		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
 
 	}
+	@Test
+	public void deleteTest() {
+		System.out.println(im.deleteImage("574835f0c9e77c000768f594"));
 
+	}
+	
 	@Test
 	public void downTest() {
 
