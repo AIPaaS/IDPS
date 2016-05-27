@@ -22,7 +22,7 @@ public class GMImageServiceImpl implements IImageService {
 
 	private static transient final Logger log = LogManager
 			.getLogger(GMImageServiceImpl.class);
-	private String confFile = "idps.properties";
+	private String confFile = "/idps.properties";
 	private String confPath = "/com/ai/paas/ipaas/idps/conf";
 
 	private static final String GM_MODE_KEY = "gmMode";

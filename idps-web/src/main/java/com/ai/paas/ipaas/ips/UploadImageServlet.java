@@ -34,7 +34,8 @@ public class UploadImageServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -914574498046477046L;
-	private static final Logger log = Logger.getLogger(UploadImageServlet.class);
+	private static final Logger log = Logger
+			.getLogger(UploadImageServlet.class);
 
 	private AuthDescriptor ad = null;
 	private IDSSClient dc = null;
@@ -72,8 +73,11 @@ public class UploadImageServlet extends HttpServlet {
 		try {
 			in = request.getInputStream();
 			filename = request.getHeader("filename");
-
-			File f1 = new File(util.getUplodPath(), filename);
+			String path = util.getUplodPath();
+			if (log.isInfoEnabled()) {
+				log.info("upload request: path=" + path + ",file=" + filename);
+			}
+			File f1 = new File(path, filename);
 			fos = new FileOutputStream(f1);
 			byte[] buffer = new byte[1024];
 			int bytes = 0;
@@ -87,8 +91,10 @@ public class UploadImageServlet extends HttpServlet {
 					e);
 			success = false;
 		} finally {
-			fos.close();
-			in.close();
+			if (null != fos)
+				fos.close();
+			if (null != in)
+				in.close();
 		}
 		if (success) {
 			String name = getName();
