@@ -133,7 +133,6 @@ dependencies{
 	
 	compile "com.sharneng:gm4java:1.1.1-SNAPSHOT"
 	compile "commons-pool:commons-pool:1.6"
-	
 }
 
 war {
