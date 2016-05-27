@@ -23,4 +23,6 @@ public class AuthConstant {
 	 * 服务标识
 	 */
 	public final static String AUTH_SRV_ID = "AUTH_SRV_ID";
+	
+	public final static String IDPS_SEC_KEY="byjsy7!@#bjwqt7!";
 }

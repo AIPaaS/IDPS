@@ -141,7 +141,9 @@ public class GMClient {
 			throws Exception {
 		long begin = System.currentTimeMillis();
 		log.debug(uri + "----GraphicsImage----scaleImage---------begin");
-		imageSize=imageSize.replaceAll("X", "x");
+		if (imageSize != null && imageSize.contains("X")) {
+			imageSize = imageSize.replace("X","x");
+		}
 		String targetPath = imageTargetRoot
 				+ (imageTargetRoot.endsWith(File.separator) ? ""
 						: File.separator) + getFirstPath(imageName)

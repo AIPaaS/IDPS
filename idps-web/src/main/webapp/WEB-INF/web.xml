@@ -10,6 +10,21 @@
 		<param-name>appName</param-name>
 		<param-value>iPaas-IDPS</param-value>
 	</context-param>
+	<filter>
+		<description>
+		</description>
+		<display-name>AuthFilter</display-name>
+		<filter-name>AuthFilter</filter-name>
+		<filter-class>com.ai.paas.ipaas.ips.AuthFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/uploadImage</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AuthFilter</filter-name>
+		<url-pattern>/deleteImage</url-pattern>
+	</filter-mapping>	
 	
 	<servlet>
 		<servlet-name>imageServer</servlet-name>

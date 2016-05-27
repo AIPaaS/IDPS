@@ -24,7 +24,7 @@ public class HttpUtil {
 	 * @param url
 	 * @return
 	 */
-	public static String upImage(String url, byte[] image, String name) {
+	public static String upImage(String url, byte[] image, String name,String token) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
 		String result = "";
@@ -46,7 +46,9 @@ public class HttpUtil {
 			connection.setRequestProperty("Content-Type",
 					"multipart/form-data;file=" + name);
 			connection.setRequestProperty("filename", name);
-
+			connection.setRequestProperty("token", token);
+			//这里加安全
+			
 			DataOutputStream out = new DataOutputStream(
 					connection.getOutputStream());
 

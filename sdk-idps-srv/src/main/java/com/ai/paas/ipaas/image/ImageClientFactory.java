@@ -67,7 +67,7 @@ public class ImageClientFactory {
 		String imageUrl = configM.get(IMAGE_URL_PATH);
 		// String imageUrl = "http://10.1.235.199:8086/iPaas-IDPS";
 		IDPSWatch watch = new IDPSWatch(client, userPid, userId, srvId,
-				imageUrl);
+				ad.getPassword(), imageUrl);
 		String imageUrlOutM = CCSComponentFactory.getConfigClient(
 				authResult.getConfigAddr(), authResult.getConfigUser(),
 				authResult.getConfigPasswd()).get(
@@ -77,7 +77,8 @@ public class ImageClientFactory {
 		configMO = gson.fromJson(imageUrlOutM, Map.class);
 
 		String imageUrlOut = configMO.get(IMAGE_URL_PATH);
-		iImageClient = new ImageClientImpl(userId, srvId, imageUrl, imageUrlOut);
+		iImageClient = new ImageClientImpl(userPid, srvId, ad.getPassword(),
+				imageUrl, imageUrlOut);
 		imageClients.put(userPid + "_" + srvId, iImageClient);
 		return iImageClient;
 	}
@@ -90,16 +91,19 @@ public class ImageClientFactory {
 	private static class IDPSWatch extends ConfigWatcher {
 		private ICCSComponent client;
 		private String userPid;
+		@SuppressWarnings("unused")
 		private String userId;
 		private String serviceId;
+		private String servicePwd;
 		private String imageUrl;
 
 		public IDPSWatch(ICCSComponent client, String userPid, String userId,
-				String serviceId, String imageUrl) {
+				String serviceId, String srvPwd, String imageUrl) {
 			this.client = client;
 			this.serviceId = serviceId;
 			this.userPid = userPid;
 			this.userId = userId;
+			this.servicePwd = srvPwd;
 			this.imageUrl = imageUrl;
 		}
 
@@ -118,8 +122,8 @@ public class ImageClientFactory {
 
 					String imageUrlOut = client.get(SEARCH_CONFIG_PATH
 							+ serviceId + IMAGE_URL_OUT_PATH, this);
-					iImageClient = new ImageClientImpl(userId, serviceId,
-							imageUrl, imageUrlOut);
+					iImageClient = new ImageClientImpl(userPid, serviceId,
+							servicePwd, imageUrl, imageUrlOut);
 					imageClients.put(userPid + "_" + serviceId, iImageClient);
 				} catch (PaasException e) {
 					log.error("投票结果变化时，读取出错：" + e.getMessage(), e);

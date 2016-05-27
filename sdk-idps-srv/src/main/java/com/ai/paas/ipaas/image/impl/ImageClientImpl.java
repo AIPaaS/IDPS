@@ -13,23 +13,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ai.paas.ipaas.image.IImageClient;
+import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.utils.HttpUtil;
+import com.ai.paas.ipaas.utils.IdpsContant;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class ImageClientImpl implements IImageClient {
 
 	private static transient Logger log = LoggerFactory
 			.getLogger(ImageClientImpl.class);
-	private String userId;
-	private String serviceId;
+	private String pId;
+	private String srvId;
+	private String srvPwd;
 	private String imageUrl;
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(String userId, String serviceId, String imageUrl,
-			String imageUrlInter) {
-		this.userId = userId;
-		this.serviceId = serviceId;
+	public ImageClientImpl(String pId, String srvId, String srvPwd,
+			String imageUrl, String imageUrlInter) {
+		this.pId = pId;
+		this.srvId = srvId;
+		this.srvPwd = srvPwd;
 		this.imageUrl = imageUrl;
 		this.imageUrlInter = imageUrlInter;
 
@@ -50,8 +55,8 @@ public class ImageClientImpl implements IImageClient {
 			log.error("no upload url, pls. check service configration.");
 			return null;
 		}
-		upUrl = upUrl + "?userId=" + userId + "&serviceId=" + serviceId;
-		String result = HttpUtil.upImage(upUrl, image, name);
+		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
+		String result = HttpUtil.upImage(upUrl, image, name, createToken());
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
 		if ("success".equals(json.get("result"))) {
@@ -75,12 +80,10 @@ public class ImageClientImpl implements IImageClient {
 		String downloadUrl = "";
 
 		if (StringUtils.isEmpty(imageScale)) {
-			downloadUrl = imageUrl + "/image/" + imageId + imageType
-					+ "?userId=" + userId + "&serviceId=" + serviceId;
+			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
 			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale
-					+ imageType + "?userId=" + userId + "&serviceId="
-					+ serviceId;
+					+ imageType;
 		}
 		log.info("Start to download " + downloadUrl);
 		HttpClient client = new HttpClient();
@@ -103,10 +106,10 @@ public class ImageClientImpl implements IImageClient {
 	}
 
 	public boolean deleteImage(String imageId) {
-		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId
-				+ "&userId" + userId + "&serviceId=" + serviceId;
+		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
 		HttpClient client = new HttpClient();
 		GetMethod httpGet = new GetMethod(deleteUrl);
+		httpGet.addRequestHeader("token", createToken());
 		log.info("Start to delete " + deleteUrl);
 
 		try {
@@ -129,7 +132,7 @@ public class ImageClientImpl implements IImageClient {
 	}
 
 	private String imageTypeFormat(String imageType) {
-		if (imageType !=null && imageType.startsWith(".")==false) {
+		if (imageType != null && imageType.startsWith(".") == false) {
 			imageType = "." + imageType;
 		}
 		switch (imageType) {
@@ -141,23 +144,23 @@ public class ImageClientImpl implements IImageClient {
 			break;
 		default:
 		}
-		
+
 		return imageType;
 	}
-	
+
 	public String getImageUrl(String imageId, String imageType) {
 		imageType = imageTypeFormat(imageType);
-		return imageUrlInter + "/image/" + imageId + imageType + "?userId="
-				+ userId + "&serviceId=" + serviceId;
+		return imageUrlInter + "/image/" + imageId + imageType;
 	}
-	
-	public String getImageUrl(String imageId, String imageType, String imageScale) {
+
+	public String getImageUrl(String imageId, String imageType,
+			String imageScale) {
 		imageType = imageTypeFormat(imageType);
 		if (imageScale != null && imageScale.contains("X")) {
-			imageScale = imageScale.replace("X","x");
+			imageScale = imageScale.replace("X", "x");
 		}
-		return imageUrlInter + "/image/" + imageId +"_"+ imageScale + imageType + "?userId="
-				+ userId + "&serviceId=" + serviceId;
+		return imageUrlInter + "/image/" + imageId + "_" + imageScale
+				+ imageType;
 	}
 
 	public String getImageUploadUrl() {
@@ -172,11 +175,10 @@ public class ImageClientImpl implements IImageClient {
 
 		if (StringUtils.isEmpty(imageScale)) {
 			downloadUrl = imageUrl + "/image/" + imageId + imageType
-					+ "?userId=" + userId + "&serviceId=" + serviceId;
+					+ "?userId=" + pId + "&serviceId=" + srvId;
 		} else {
 			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale
-					+ imageType + "?userId=" + userId + "&serviceId="
-					+ serviceId;
+					+ imageType + "?userId=" + pId + "&serviceId=" + srvId;
 		}
 		log.info("Start to download " + downloadUrl);
 		HttpClient client = new HttpClient();
@@ -195,5 +197,17 @@ public class ImageClientImpl implements IImageClient {
 			httpGet.releaseConnection();
 		}
 		return bytes;
+	}
+
+	private String createToken() {
+		String token = null;
+		Gson gson=new Gson();
+		JsonObject json=new JsonObject();
+		json.addProperty("pid", this.pId);
+		json.addProperty("srvId", this.srvId);
+		json.addProperty("srvPwd", this.srvPwd);
+		String data=gson.toJson(json);
+		token = CiperUtil.encrypt(IdpsContant.IDPS_SEC_KEY, data);
+		return token;
 	}
 }

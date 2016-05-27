@@ -209,7 +209,8 @@ public class ImageServlet extends HttpServlet {
 		try {
 			updateTime = dc.getLastUpdateTime(imageName);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("", e);
+			throw e;
 		}
 		return updateTime != null ? updateTime.getTime() : 1412931179491l;
 	}
