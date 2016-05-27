@@ -13,11 +13,11 @@ libwmf-devel libwmf libxml2-devel libxml2 zlib-devel zlib gd-devel gd bzip2 bzip
 
 RUN yum install -y java-1.8.0-openjdk
 RUN cd /pkg/GraphicsMagick-1.3.23/GraphicsMagick-1.3.23 && ls -l
-RUN cd /pkg/GraphicsMagick-1.3.23/GraphicsMagick-1.3.23 && ./configure --prefix=/opt/freeware/GraphicsMagick-1.3.23 && make && make install
+RUN cd /pkg/GraphicsMagick-1.3.23/GraphicsMagick-1.3.23 && ./configure --prefix=/opt/freeware/GraphicsMagick && make && make install
 
 
-RUN mkdir /ori
-RUN mkdir /dest
+RUN mkdir /oriImg
+RUN mkdir /destImg
 RUN mkdir /uploads
 # Install tomcat7 
 ADD ./pkg/apache-tomcat-8.0.35.tar.gz /pkg/apache-tomcat-8.0.35
@@ -30,7 +30,7 @@ RUN rm -fr /opt/apache-tomcat-8.0.35/webapps/*
 COPY ./build/libs/iPaaS-IDPS.war /opt/apache-tomcat-8.0.35/webapps/iPaas-IDPS.war
 
 ENV CATALINA_HOME /opt/apache-tomcat-8.0.35  
-ENV PATH $PATH:$CATALINA_HOME/bin:/opt/freeware/GraphicsMagick-1.3.23/bin  
+ENV PATH $PATH:$CATALINA_HOME/bin:/opt/freeware/GraphicsMagick/bin  
 ENV PATH $CATALINA_HOME/bin:$PATH
 
 

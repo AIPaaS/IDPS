@@ -83,6 +83,7 @@ public class ImageUtil {
 	 * 是否使用GM模式
 	 * 
 	 * @return
+	 * @throws Exception
 	 */
 	public boolean getGMMode() {
 		return getIntance().isGMMode();
@@ -92,6 +93,7 @@ public class ImageUtil {
 	 * 异常时， 图片路径
 	 * 
 	 * @return
+	 * @throws Exception
 	 */
 	public String getReservePath() {
 		return getIntance().getReservePath();

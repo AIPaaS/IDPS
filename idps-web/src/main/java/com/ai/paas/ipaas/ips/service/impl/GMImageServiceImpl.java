@@ -1,19 +1,14 @@
 package com.ai.paas.ipaas.ips.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.ai.paas.ipaas.PaasRuntimeException;
-import com.ai.paas.ipaas.ccs.constants.ConfigException;
-import com.ai.paas.ipaas.ccs.inner.CCSComponentFactory;
-import com.ai.paas.ipaas.ccs.inner.ICCSComponent;
-import com.ai.paas.ipaas.ccs.zookeeper.ConfigWatcher;
-import com.ai.paas.ipaas.ccs.zookeeper.ConfigWatcher.Event.KeeperState;
-import com.ai.paas.ipaas.ccs.zookeeper.ConfigWatcherEvent;
 import com.ai.paas.ipaas.ips.service.IImageService;
 import com.ai.paas.ipaas.uac.service.UserClientFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
@@ -27,7 +22,8 @@ public class GMImageServiceImpl implements IImageService {
 
 	private static transient final Logger log = LogManager
 			.getLogger(GMImageServiceImpl.class);
-	private String confPath = "";
+	private String confFile = "idps.properties";
+	private String confPath = "/com/ai/paas/ipaas/idps/conf";
 
 	private static final String GM_MODE_KEY = "gmMode";
 	private static final String RESERVE_IMAGE_KEY = "reserveImage";
@@ -47,33 +43,6 @@ public class GMImageServiceImpl implements IImageService {
 
 	private GMClient gmClient;
 	private AuthDescriptor ad = null;
-	private ICCSComponent ccsClient = null;
-
-	private ConfigWatcher configWatcher = new ConfigWatcher() {
-		public void processEvent(ConfigWatcherEvent event) {
-			if (event == null) {
-				// 不做什么
-				return;
-			}
-			// 连接状态
-			ConfigWatcher.Event.KeeperState keeperState = event.getState();
-			// 事件类型
-			ConfigWatcher.Event.EventType eventType = event.getType();
-			if (ConfigWatcher.Event.EventType.NodeDataChanged == eventType) {
-				// 监控到内容变化，实现算法
-				if (log.isInfoEnabled()) {
-					log.info("Get ZK node children num chanage event!");
-				}
-				processConfig();
-			}
-			// 可能存在接收到其他事件，比如断开了
-			if (KeeperState.Disconnected == keeperState
-					|| ConfigWatcher.Event.KeeperState.Expired == keeperState) {
-				// 断开了，由于是临时节点，因此不管了。其他应该可以增加
-			}
-		}
-
-	};
 
 	public void init(AuthDescriptor ad) {
 		this.ad = ad;
@@ -89,19 +58,10 @@ public class GMImageServiceImpl implements IImageService {
 		Assert.notNull(authResult.getConfigPasswd(), ResourceUtil
 				.getMessage("com.ai.paas.ipaas.common.zk_passwd_null"));
 
-		// 获取内部zk地址后取得配置信息，返回json
-
-		try {
-			ccsClient = CCSComponentFactory.getConfigClient(
-					authResult.getConfigAddr(), authResult.getConfigUser(),
-					authResult.getConfigPasswd());
-		} catch (ConfigException e) {
-			throw new PaasRuntimeException(" get GM config info error!", e);
-		}
 		processConfig();
 	}
 
-	public GMImageServiceImpl(AuthDescriptor ad) {
+	public GMImageServiceImpl(AuthDescriptor ad)  {
 		init(ad);
 	}
 
@@ -139,15 +99,15 @@ public class GMImageServiceImpl implements IImageService {
 		// GM的配置信息路径
 		String config = null;
 
+		// 加载属性文件
+		Properties props = new Properties();
 		try {
-			//TODO add gm ccs path
-			config = ccsClient.get("", configWatcher);
-		} catch (ConfigException e) {
-			log.error("", e);
+			props.load(this.getClass().getResourceAsStream(confFile));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		if (log.isInfoEnabled()) {
-			log.info("new log configuration is received: " + config);
-		}
+		// 获取属性文件
+		config = props.getProperty(confPath);
 		gmClient = new GMClient(config, ad);
 		Gson gson = new Gson();
 		JsonObject json = gson.fromJson(config, JsonObject.class);
