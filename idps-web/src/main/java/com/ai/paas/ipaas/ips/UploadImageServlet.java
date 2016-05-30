@@ -105,6 +105,7 @@ public class UploadImageServlet extends HttpServlet {
 				// gm处理
 				log.debug("----转化图片格式----------------");
 				String ext = getFileExt(filename);
+				log.debug("file=" + filename + " has extension:" + ext);
 				util.convertType(filename, name + util.getSupportType(ext));
 				log.debug("----保存到mongoDB----------------");
 				id = dc.save(new File(getDestPath(name, ext)), filename);

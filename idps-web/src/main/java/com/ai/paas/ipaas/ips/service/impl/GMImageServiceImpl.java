@@ -177,6 +177,7 @@ public class GMImageServiceImpl implements IImageService {
 
 	@Override
 	public String getSupportType(String ext) {
+		log.debug("ext:" + ext + ", types:" + types);
 		if (types != null && types.size() > 0) {
 			if (types.contains(ext)) {
 				return ext;

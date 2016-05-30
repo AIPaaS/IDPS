@@ -50,7 +50,7 @@ public class ImageTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String id = im.upLoadImage(buffer, "004.jpg");
+		String id = im.upLoadImage(buffer, "bee.png");
 
 		System.out.println(id);
 	}
