@@ -141,8 +141,8 @@ public class ImageUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getSupportType() {
-		return getIntance().getSupportType();
+	public String getSupportType(String ext) {
+		return getIntance().getSupportType(ext);
 	}
 
 	public static void main(String[] args) {

@@ -58,7 +58,7 @@ sourceSets {
 }
 
 ext {
-	//moduleMode="-SNAPSHOT";
+	moduleMode="-SNAPSHOT";
 	moduleMode="";
 	moduleName="ipaas-idps";
 	moduleVersion="0.3"+moduleMode

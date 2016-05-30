@@ -176,10 +176,14 @@ public class GMImageServiceImpl implements IImageService {
 	}
 
 	@Override
-	public String getSupportType() {
-		if (types != null && types.size() > 0)
-			return types.get(0);
-		else
+	public String getSupportType(String ext) {
+		if (types != null && types.size() > 0) {
+			if (types.contains(ext)) {
+				return ext;
+			} else {
+				return types.get(0);
+			}
+		} else
 			return imageType;
 	}
 }

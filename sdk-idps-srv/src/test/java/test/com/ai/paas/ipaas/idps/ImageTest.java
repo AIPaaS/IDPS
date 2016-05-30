@@ -34,7 +34,7 @@ public class ImageTest {
 		byte[] buffer = null;
 		try {
 			File file = new File(
-					"d:/004.jpg");
+					"d:/bee.png");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -57,7 +57,7 @@ public class ImageTest {
 
 	@Test
 	public void seTest() {
-		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
+		System.out.println(im.getImageUrl("574bababc9e77c000768f598", ".png"));
 
 	}
 	@Test

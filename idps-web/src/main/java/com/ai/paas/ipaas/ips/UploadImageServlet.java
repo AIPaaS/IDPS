@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
+import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.utils.AuthUtil;
 import com.ai.paas.ipaas.utils.ImageUtil;
 import com.google.gson.Gson;
@@ -103,9 +104,10 @@ public class UploadImageServlet extends HttpServlet {
 			try {
 				// gm处理
 				log.debug("----转化图片格式----------------");
-				util.convertType(filename, name + util.getSupportType());
+				String ext = getFileExt(filename);
+				util.convertType(filename, name + util.getSupportType(ext));
 				log.debug("----保存到mongoDB----------------");
-				id = dc.save(new File(getDestPath(name)), filename);
+				id = dc.save(new File(getDestPath(name, ext)), filename);
 				json.addProperty("id", id);
 			} catch (Exception e) {
 				success = false;
@@ -141,14 +143,24 @@ public class UploadImageServlet extends HttpServlet {
 		}
 	}
 
-	private String getDestPath(String name) {
+	private String getDestPath(String name, String ext) {
 		return util.getDestPath().endsWith(File.separator) ? (util
-				.getDestPath() + name + util.getSupportType()) : (util
-				.getDestPath() + File.separator + name + util.getSupportType());
+				.getDestPath() + name + util.getSupportType(ext)) : (util
+				.getDestPath() + File.separator + name + util
+				.getSupportType(ext));
 	}
 
 	private String getName() {
 		return UUID.randomUUID() + "";
 	}
 
+	private String getFileExt(String name) {
+		if (StringUtil.isBlank(name))
+			return null;
+		if (name.lastIndexOf(".") >= 0) {
+			return name.substring(name.lastIndexOf("."));
+		} else {
+			return null;
+		}
+	}
 }

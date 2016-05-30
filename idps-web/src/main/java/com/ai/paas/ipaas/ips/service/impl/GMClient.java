@@ -142,7 +142,7 @@ public class GMClient {
 		long begin = System.currentTimeMillis();
 		log.debug(uri + "----GraphicsImage----scaleImage---------begin");
 		if (imageSize != null && imageSize.contains("X")) {
-			imageSize = imageSize.replace("X","x");
+			imageSize = imageSize.replace("X", "x");
 		}
 		String targetPath = imageTargetRoot
 				+ (imageTargetRoot.endsWith(File.separator) ? ""
@@ -223,8 +223,10 @@ public class GMClient {
 		}
 		// 去杂质，对于小图片质量百分百
 		if (Integer.valueOf(width) < 250) {
-			cmd.append(" -strip -define jpeg:preserve-settings ");
-			cmd.append(" -sharpen 0x1.2 ");
+			if(imageType.lastIndexOf(".jpg")>=0) {
+				cmd.append(" -strip -define jpeg:preserve-settings ");
+				cmd.append(" -sharpen 0x1.2 ");
+			}
 			cmd.append(" -quality 100 ");
 		} else {
 			if (50 < quality && quality < 101) {
@@ -319,7 +321,14 @@ public class GMClient {
 
 	private String getConvertTpyrCommand(String src, String desc) {
 		// 去杂质
-		return " convert" + " -strip -define jpeg:preserve-settings "
-				+ " -quality 100" + " " + src + " " + desc;
+		// 这里要判断一下图片类型
+		if (desc.lastIndexOf(".jpg") >= 0) {
+			return " convert" + " -strip -define jpeg:preserve-settings "
+					+ " -quality 100" + " " + src + " " + desc;
+		} else {
+			// 按png处理
+			return " convert" + " -quality 100 " + " " + src
+					+ " +dither -depth 8 -colors 50 " + desc;
+		}
 	}
 }

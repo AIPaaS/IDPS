@@ -111,7 +111,7 @@ public interface IImageService {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getSupportType();
+	public String getSupportType(String ext);
 
 	/**
 	 * 给图片加水印
