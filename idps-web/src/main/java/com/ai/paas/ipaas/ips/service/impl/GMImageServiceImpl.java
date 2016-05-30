@@ -29,6 +29,7 @@ public class GMImageServiceImpl implements IImageService {
 	private static final String RESERVE_IMAGE_KEY = "reserveImage";
 	private static final String UPLOAD_PATH_KEY = "srcPath";
 	private static final String DEST_PATH_KEY = "targetPath";
+	private static final String IMAGE_TYPE_KEY = "imageType";
 
 	// 图片格式 .jpg等
 	private String imageType = null;
@@ -113,6 +114,7 @@ public class GMImageServiceImpl implements IImageService {
 		gmClient = new GMClient(config, ad);
 		Gson gson = new Gson();
 		JsonObject json = gson.fromJson(config, JsonObject.class);
+		imageType=json.get(IMAGE_TYPE_KEY).getAsString();
 		if (imageType == null || "".equals(imageType)) {
 			types = Arrays.asList(new String[] { ".jpg" });
 		} else {
