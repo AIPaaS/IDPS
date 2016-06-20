@@ -59,7 +59,7 @@ sourceSets {
 
 ext {
 	moduleMode="-SNAPSHOT";
-	moduleMode="";
+	//moduleMode="";
 	moduleName="ipaas-idps";
 	moduleVersion="0.3"+moduleMode
 	publishUserName = "devadm"

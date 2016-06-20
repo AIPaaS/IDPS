@@ -44,7 +44,7 @@ public class HttpUtil {
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
 			connection.setRequestProperty("Content-Type",
-					"multipart/form-data;file=" + name);
+					"multipart/form-data; boundary=gc0p4Jq0M2Yt08jU534c0p;file=" + name);
 			connection.setRequestProperty("filename", name);
 			connection.setRequestProperty("token", token);
 			//这里加安全
