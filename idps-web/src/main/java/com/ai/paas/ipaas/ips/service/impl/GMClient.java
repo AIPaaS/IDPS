@@ -328,7 +328,7 @@ public class GMClient {
 		} else {
 			// 按png处理
 			return " convert" + " -quality 100 " + " " + src
-					+ " +dither -depth 8 -colors 50 " + desc;
+					+ " +dither -depth 8 " + desc;
 		}
 	}
 }

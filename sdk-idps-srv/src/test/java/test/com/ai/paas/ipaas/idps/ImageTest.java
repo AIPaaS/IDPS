@@ -19,7 +19,7 @@ public class ImageTest {
 
 	static {
 		ad = new AuthDescriptor(AUTH_ADDR, "0A8111DB280044528DF309D501DFFF6A",
-				"123456", "IDPS023");
+				"123456", "IDPS020");
 		try {
 			im = ImageClientFactory.getClient(ad);
 		} catch (Exception e) {
@@ -34,7 +34,7 @@ public class ImageTest {
 		byte[] buffer = null;
 		try {
 			File file = new File(
-					"d:/003.jpg");
+					"d:/234.png");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -50,14 +50,14 @@ public class ImageTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String id = im.upLoadImage(buffer, "003.jpg");
+		String id = im.upLoadImage(buffer, "234.png");
 
 		System.out.println(id);
 	}
 
 	@Test
 	public void seTest() {
-		System.out.println(im.getImageUrl("574bababc9e77c000768f598", ".jpg"));
+		System.out.println(im.getImageUrl("576b8c46c9e77c0007c34529", ".png"));
 
 	}
 	@Test
