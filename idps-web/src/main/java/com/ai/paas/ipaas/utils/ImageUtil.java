@@ -115,6 +115,10 @@ public class ImageUtil {
 		getIntance().convertType(srcImage, descImage);
 	}
 
+	public boolean judgeSize(String srcImage, int minWidth, int minHeight) {
+		return getIntance().judgeSize(srcImage, minWidth, minHeight);
+	}
+
 	/**
 	 * 上传图片 本地存放路径
 	 * 

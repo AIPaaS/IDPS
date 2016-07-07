@@ -7,12 +7,14 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.gm4java.engine.GMConnection;
 import org.gm4java.engine.GMService;
+import org.gm4java.engine.GMServiceException;
 import org.gm4java.engine.support.GMConnectionPoolConfig;
 import org.gm4java.engine.support.PooledGMService;
 
 import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
+import com.ai.paas.ipaas.util.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -223,7 +225,7 @@ public class GMClient {
 		}
 		// 去杂质，对于小图片质量百分百
 		if (Integer.valueOf(width) < 250) {
-			if(imageType.lastIndexOf(".jpg")>=0) {
+			if (imageType.lastIndexOf(".jpg") >= 0) {
 				cmd.append(" -strip -define jpeg:preserve-settings ");
 				cmd.append(" -sharpen 0x1.2 ");
 			}
@@ -319,6 +321,44 @@ public class GMClient {
 				+ (System.currentTimeMillis() - begin));
 	}
 
+	public boolean judgeSize(String srcImage, int minWidth, int minHeight) {
+		log.debug("----GraphicsImage----judge---------begin");
+		if (minWidth <= 0 && minHeight <= 0)
+			return true;
+		GMConnection connection = null;
+		try {
+			String command = getSizeCommand(srcImage);
+			log.debug("----GraphicsImage----judge---------command:" + command);
+			connection = gmService.getConnection();
+			String result = connection.execute(command);
+			if (StringUtil.isBlank(result))
+				return false;
+			String[] size = result.split(",");
+			if (null == size || size.length < 2) {
+				return false;
+			}
+			int width = Integer.parseInt(size[0]);
+			int height = Integer.parseInt(size[1]);
+			if (minWidth > 0 && width < minWidth) {
+				return false;
+			}
+			if (minHeight > 0 && height < minHeight) {
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			log.error("", e);
+			return false;
+		} finally {
+			if (connection != null)
+				try {
+					connection.close();
+				} catch (GMServiceException e) {
+					log.error("", e);
+				}
+		}
+	}
+
 	private String getConvertTpyrCommand(String src, String desc) {
 		// 去杂质
 		// 这里要判断一下图片类型
@@ -330,5 +370,9 @@ public class GMClient {
 			return " convert" + " -quality 100 " + " " + src
 					+ " +dither -depth 8 " + desc;
 		}
+	}
+
+	private String getSizeCommand(String src) {
+		return " identify  -format %w,%h" + " " + src;
 	}
 }

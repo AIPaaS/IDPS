@@ -68,12 +68,16 @@ public class UploadImageServlet extends HttpServlet {
 		boolean success = false;
 		log.debug("----保存本地图片----------------");
 		String filename = null;
+		String minWidth = null;
+		String minHeight = null;
 		FileOutputStream fos = null;
 		InputStream in = null;
 		JsonObject json = new JsonObject();
 		try {
 			in = request.getInputStream();
 			filename = request.getHeader("filename");
+			minWidth = request.getParameter("minWidth");
+			minHeight = request.getParameter("minHeight");
 			String path = util.getUplodPath();
 			if (log.isInfoEnabled()) {
 				log.info("upload request: path=" + path + ",file=" + filename);
@@ -91,6 +95,8 @@ public class UploadImageServlet extends HttpServlet {
 			log.error("图片保存到本地出错：" + util.getUplodPath() + ",file:" + filename,
 					e);
 			success = false;
+			json.addProperty("saveLocalFile:" + e.getMessage(), e
+					.getStackTrace().toString());
 		} finally {
 			if (null != fos)
 				fos.close();
@@ -102,10 +108,25 @@ public class UploadImageServlet extends HttpServlet {
 			String id = "";
 
 			try {
+
 				// gm处理
 				log.debug("----转化图片格式----------------");
 				String ext = getFileExt(filename);
 				log.debug("file=" + filename + " has extension:" + ext);
+				// 此处要进行尺寸判断
+				int _minWidth = 0;
+				int _minHeight = 0;
+				if (null != minWidth) {
+					_minWidth = Integer.parseInt(minWidth);
+				}
+				if (null != minHeight) {
+					_minHeight = Integer.parseInt(minHeight);
+				}
+				if (!util.judgeSize(filename, _minWidth, _minHeight)) {
+					throw new IllegalArgumentException(
+							"Image Size is illegal,minWidth:" + minWidth
+									+ ",minHeight:" + minHeight);
+				}
 				util.convertType(filename, name + util.getSupportType(ext));
 				log.debug("----保存到mongoDB----------------");
 				id = dc.save(new File(getDestPath(name, ext)), filename);
@@ -113,6 +134,9 @@ public class UploadImageServlet extends HttpServlet {
 			} catch (Exception e) {
 				success = false;
 				log.error("图片格式转换、保存到mongodb出错：", e);
+				// 这里反馈给客户端
+				json.addProperty("saveLocalFile:" + e.getMessage(), e
+						.getStackTrace().toString());
 			}
 		}
 		json.addProperty("result", success ? "success" : "failure");

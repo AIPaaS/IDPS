@@ -114,7 +114,7 @@ public class GMImageServiceImpl implements IImageService {
 		gmClient = new GMClient(config, ad);
 		Gson gson = new Gson();
 		JsonObject json = gson.fromJson(config, JsonObject.class);
-		imageType=json.get(IMAGE_TYPE_KEY).getAsString();
+		imageType = json.get(IMAGE_TYPE_KEY).getAsString();
 		if (imageType == null || "".equals(imageType)) {
 			types = Arrays.asList(new String[] { ".jpg" });
 		} else {
@@ -188,5 +188,10 @@ public class GMImageServiceImpl implements IImageService {
 			}
 		} else
 			return imageType;
+	}
+
+	@Override
+	public boolean judgeSize(String srcImage, int minWidth, int minHeight) {
+		return gmClient.judgeSize(srcImage, minWidth, minHeight);
 	}
 }

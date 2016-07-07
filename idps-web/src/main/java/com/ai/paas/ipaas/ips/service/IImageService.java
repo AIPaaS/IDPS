@@ -131,6 +131,13 @@ public interface IImageService {
 	 */
 	public void removeLocalSizedImage(String path) throws Exception;
 	
-	
+	/**
+	 * 判断原图是否符合尺寸要求
+	 * @param srcImage
+	 * @param minWidth
+	 * @param minHeight
+	 * @return
+	 */
+	public boolean judgeSize(String srcImage,int minWidth,int minHeight);
 
 }
