@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ai.paas.ipaas.PaasRuntimeException;
 import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.utils.HttpUtil;
@@ -40,29 +41,8 @@ public class ImageClientImpl implements IImageClient {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public String upLoadImage(byte[] image, String name) {
-
-		if (image == null)
-			return null;
-		if (image.length > 10 * 1024 * 1024) {
-			log.error("upload image size great than 10M of " + name);
-			return null;
-		}
-		String id = null;
-		String upUrl = getImageUploadUrl();
-		if (upUrl == null || upUrl.length() == 0) {
-			log.error("no upload url, pls. check service configration.");
-			return null;
-		}
-		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = HttpUtil.upImage(upUrl, image, name, createToken());
-		Map<String, String> json = new HashMap<String, String>();
-		json = gson.fromJson(result, Map.class);
-		if ("success".equals(json.get("result"))) {
-			id = json.get("id");
-		}
-		return id;
+		return upLoadImage(image, name, 0, 0);
 	}
 
 	public String getImgServerInterAddr() {
@@ -174,11 +154,10 @@ public class ImageClientImpl implements IImageClient {
 		String downloadUrl = "";
 
 		if (StringUtils.isEmpty(imageScale)) {
-			downloadUrl = imageUrl + "/image/" + imageId + imageType
-					+ "?userId=" + pId + "&serviceId=" + srvId;
+			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
 			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale
-					+ imageType + "?userId=" + pId + "&serviceId=" + srvId;
+					+ imageType;
 		}
 		log.info("Start to download " + downloadUrl);
 		HttpClient client = new HttpClient();
@@ -201,13 +180,44 @@ public class ImageClientImpl implements IImageClient {
 
 	private String createToken() {
 		String token = null;
-		Gson gson=new Gson();
-		JsonObject json=new JsonObject();
+		Gson gson = new Gson();
+		JsonObject json = new JsonObject();
 		json.addProperty("pid", this.pId);
 		json.addProperty("srvId", this.srvId);
 		json.addProperty("srvPwd", this.srvPwd);
-		String data=gson.toJson(json);
+		String data = gson.toJson(json);
 		token = CiperUtil.encrypt(IdpsContant.IDPS_SEC_KEY, data);
 		return token;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String upLoadImage(byte[] image, String name, int minWidth,
+			int minHeight) {
+
+		if (image == null)
+			return null;
+		if (image.length > 10 * 1024 * 1024) {
+			log.error("upload image size great than 10M of " + name);
+			return null;
+		}
+		String id = null;
+		String upUrl = getImageUploadUrl();
+		if (upUrl == null || upUrl.length() == 0) {
+			log.error("no upload url, pls. check service configration.");
+			return null;
+		}
+		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
+		String result = HttpUtil.upImage(upUrl, image, name, minWidth,
+				minHeight, createToken());
+		Map<String, String> json = new HashMap<String, String>();
+		json = gson.fromJson(result, Map.class);
+		if (null != json && null != json.get("result")
+				&& "success".equals(json.get("result"))) {
+			id = json.get("id");
+		} else {
+			throw new PaasRuntimeException(result);
+		}
+		return id;
 	}
 }

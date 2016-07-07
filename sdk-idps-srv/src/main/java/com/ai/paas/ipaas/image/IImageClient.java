@@ -15,6 +15,17 @@ public interface IImageClient {
 	 * @return 图片id
 	 */
 	public String upLoadImage(byte[] image, String name);
+	
+	
+	/**
+	 * 对图片尺寸进行大小判断，符合条件的上传，不符合的扔出异常
+	 * @param image
+	 * @param name
+	 * @param minWidth
+	 * @param minHeigt
+	 * @return
+	 */
+	public String upLoadImage(byte[] image, String name,int minWidth,int minHeight);
 
 	/**
 	 * 
