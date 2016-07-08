@@ -81,6 +81,7 @@ public class UploadImageServlet extends HttpServlet {
 			String path = util.getUplodPath();
 			if (log.isInfoEnabled()) {
 				log.info("upload request: path=" + path + ",file=" + filename);
+				log.info("minWidth: " + minWidth + ",minHeight:" + minHeight);
 			}
 			File f1 = new File(path, filename);
 			fos = new FileOutputStream(f1);
