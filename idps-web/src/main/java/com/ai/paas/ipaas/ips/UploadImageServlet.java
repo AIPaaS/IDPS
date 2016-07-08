@@ -96,8 +96,10 @@ public class UploadImageServlet extends HttpServlet {
 			log.error("图片保存到本地出错：" + util.getUplodPath() + ",file:" + filename,
 					e);
 			success = false;
-			json.addProperty("saveLocalFile:" + e.getMessage(), e
-					.getStackTrace().toString());
+			json.addProperty("exception", e.getClass().getSimpleName());
+			// 这里反馈给客户端
+			json.addProperty("message", e.getMessage());
+			json.addProperty("stacktrace", e.getStackTrace().toString());
 		} finally {
 			if (null != fos)
 				fos.close();
@@ -124,7 +126,7 @@ public class UploadImageServlet extends HttpServlet {
 					_minHeight = Integer.parseInt(minHeight);
 				}
 				if (!util.judgeSize(filename, _minWidth, _minHeight)) {
-					throw new IllegalArgumentException(
+					throw new ImageSizeIllegalException(
 							"Image Size is illegal,minWidth:" + minWidth
 									+ ",minHeight:" + minHeight);
 				}
@@ -135,9 +137,10 @@ public class UploadImageServlet extends HttpServlet {
 			} catch (Exception e) {
 				success = false;
 				log.error("图片格式转换、保存到mongodb出错：", e);
+				json.addProperty("exception", e.getClass().getSimpleName());
 				// 这里反馈给客户端
-				json.addProperty("saveLocalFile:" + e.getMessage(), e
-						.getStackTrace().toString());
+				json.addProperty("message", e.getMessage());
+				json.addProperty("stacktrace", e.getStackTrace().toString());
 			}
 		}
 		json.addProperty("result", success ? "success" : "failure");
