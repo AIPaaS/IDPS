@@ -331,6 +331,7 @@ public class GMClient {
 			log.debug("----GraphicsImage----judge---------command:" + command);
 			connection = gmService.getConnection();
 			String result = connection.execute(command);
+			log.debug("----GraphicsImage----judge---------result:" + result);
 			if (StringUtil.isBlank(result))
 				return false;
 			String[] size = result.split(",");
@@ -339,6 +340,8 @@ public class GMClient {
 			}
 			int width = Integer.parseInt(size[0]);
 			int height = Integer.parseInt(size[1]);
+			log.debug("----GraphicsImage----judge---------width:" + width
+					+ ",height:" + height);
 			if (minWidth > 0 && width < minWidth) {
 				return false;
 			}
@@ -374,5 +377,26 @@ public class GMClient {
 
 	private String getSizeCommand(String src) {
 		return " identify  -format %w,%h" + " " + src;
+	}
+
+	public static void main(String[] args) {
+		String result = "702,702";
+		int minWidth = 750;
+		int minHeight = 750;
+		if (StringUtil.isBlank(result))
+			System.out.println(false);
+		String[] size = result.split(",");
+		if (null == size || size.length < 2) {
+			System.out.println(false);
+		}
+		int width = Integer.parseInt(size[0]);
+		int height = Integer.parseInt(size[1]);
+		if (minWidth > 0 && width < minWidth) {
+			System.out.println(false);
+		}
+		if (minHeight > 0 && height < minHeight) {
+			System.out.println(false);
+		}
+		System.out.println(true);
 	}
 }
