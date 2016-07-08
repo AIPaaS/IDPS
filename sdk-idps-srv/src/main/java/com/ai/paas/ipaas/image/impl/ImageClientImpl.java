@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ai.paas.ipaas.PaasRuntimeException;
 import com.ai.paas.ipaas.image.IImageClient;
+import com.ai.paas.ipaas.image.ImageSizeIllegalException;
 import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.utils.HttpUtil;
 import com.ai.paas.ipaas.utils.IdpsContant;
@@ -216,6 +217,12 @@ public class ImageClientImpl implements IImageClient {
 				&& "success".equals(json.get("result"))) {
 			id = json.get("id");
 		} else {
+			// 这里进行异常的处理
+			String exception = json.get("exception");
+			if (ImageSizeIllegalException.class.getSimpleName()
+					.equalsIgnoreCase(exception)) {
+				throw new ImageSizeIllegalException(json.get("message"));
+			}
 			throw new PaasRuntimeException(result);
 		}
 		return id;
