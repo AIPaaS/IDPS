@@ -192,6 +192,8 @@ public class GMImageServiceImpl implements IImageService {
 
 	@Override
 	public boolean judgeSize(String srcImage, int minWidth, int minHeight) {
-		return gmClient.judgeSize(srcImage, minWidth, minHeight);
+		String src = uploadPath.endsWith(File.separator) ? (uploadPath + srcImage)
+				: (uploadPath + File.separator + srcImage);
+		return gmClient.judgeSize(src, minWidth, minHeight);
 	}
 }
