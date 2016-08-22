@@ -218,10 +218,12 @@ public class ImageClientImpl implements IImageClient {
 			id = json.get("id");
 		} else {
 			// 这里进行异常的处理
-			String exception = json.get("exception");
-			if (ImageSizeIllegalException.class.getSimpleName()
-					.equalsIgnoreCase(exception)) {
-				throw new ImageSizeIllegalException(json.get("message"));
+			if (null != json && null != json.get("exception")) {
+				String exception = json.get("exception");
+				if (ImageSizeIllegalException.class.getSimpleName()
+						.equalsIgnoreCase(exception)) {
+					throw new ImageSizeIllegalException(json.get("message"));
+				}
 			}
 			throw new PaasRuntimeException(result);
 		}
