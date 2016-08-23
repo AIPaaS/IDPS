@@ -35,7 +35,7 @@ pmdTest {
     }
 }
 
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+[compileJava, compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
 
 repositories {
     maven{ url "http://10.1.228.199:18081/nexus/content/groups/public/"  }
@@ -58,8 +58,8 @@ sourceSets {
 }
 
 ext {
-	moduleMode="-SNAPSHOT";
-	//moduleMode="";
+	//moduleMode="-SNAPSHOT";
+	moduleMode="";
 	moduleName="ipaas-idps";
 	moduleVersion="0.3"+moduleMode
 	publishUserName = "devadm"
@@ -123,11 +123,67 @@ task copy3rdJars(type: Copy) {
 	}
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+	baseName moduleName
+    version moduleVersion
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	baseName moduleName
+    version moduleVersion
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 publish.dependsOn build 
 
 
 publishing {
     publications {
+       mavenJar(MavenPublication) {
+        	groupId group
+        	artifactId "${moduleName}"
+            artifact sourcesJar
+            version moduleVersion
+            pom.withXml {
+	            asNode().children().last() + {
+	                delegate.dependencies {
+	                    delegate.dependency {
+	                        delegate.groupId("commons-httpclient")
+	                        delegate.artifactId("commons-httpclient")
+	                        delegate.version("3.1")
+	                    }
+	                    delegate.dependency {
+	                        delegate.groupId("commons-codec")
+	                        delegate.artifactId("commons-codec")
+	                        delegate.version("1.9")
+	                    }	                    
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-common")
+							delegate.version("0.3")
+						}
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-uac")
+							delegate.version("0.3")
+						}
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-ccs-inner")
+							delegate.version("0.3")
+						}
+	                }
+	            }
+	        }
+        }
+        
        publishing.publications.create("${moduleName}", MavenPublication) {
             groupId group
             artifactId moduleName
