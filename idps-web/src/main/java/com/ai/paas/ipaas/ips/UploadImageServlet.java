@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -45,17 +44,6 @@ public class UploadImageServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		ad = AuthUtil.getAuthInfo();
-		if (null == ad) {
-			throw new ServletException(
-					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
-		}
-		try {
-			dc = DSSFactory.getClient(ad);
-		} catch (Exception e) {
-			throw new ServletException(e);
-		}
-		util = new ImageUtil(ad);
 		super.init();
 	}
 
@@ -65,6 +53,25 @@ public class UploadImageServlet extends HttpServlet {
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		HttpServletResponse response = (HttpServletResponse) arg1;
 
+		String needAuth = request.getParameter("needAuth");
+		String mongoInfo = request.getParameter("mongoInfo");
+		System.out.println("++++++++++ needAuth:["+needAuth+"],mongoInfo:["+mongoInfo+"] +++++++++++++++");
+		try {
+			if ("true".equals(needAuth)) {
+				ad = AuthUtil.getAuthInfo();
+				if (null == ad) {
+					throw new ServletException(
+							"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
+				}
+				util = new ImageUtil(ad);
+				dc = AuthUtil.getDssClient(ad);
+			} else {
+				dc = AuthUtil.getDssBaseClient(mongoInfo);
+			}
+		} catch (Exception ex) {
+			throw new ServletException("++++++++++++++ UploadImageServlet initialized dssClient exception ++++++++++++++");
+		}
+		
 		boolean success = false;
 		log.debug("----保存本地图片----------------");
 		String filename = null;
@@ -106,12 +113,12 @@ public class UploadImageServlet extends HttpServlet {
 			if (null != in)
 				in.close();
 		}
+		
 		if (success) {
 			String name = getName();
 			String id = "";
 
 			try {
-
 				// gm处理
 				log.debug("----转化图片格式----------------");
 				String ext = getFileExt(filename);
@@ -125,6 +132,7 @@ public class UploadImageServlet extends HttpServlet {
 				if (null != minHeight) {
 					_minHeight = Integer.parseInt(minHeight);
 				}
+				
 				if (!util.judgeSize(filename, _minWidth, _minHeight)) {
 					throw new ImageSizeIllegalException(
 							"Image Size is illegal,minWidth:" + minWidth
@@ -144,6 +152,7 @@ public class UploadImageServlet extends HttpServlet {
 			}
 		}
 		json.addProperty("result", success ? "success" : "failure");
+		
 		response(response, gson.toJson(json));
 	}
 

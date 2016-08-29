@@ -1,22 +1,35 @@
 package com.ai.paas.ipaas.utils;
 
+import com.ai.paas.ipaas.dss.DSSFactory;
+import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
+import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.ips.AuthConstant;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.util.StringUtil;
 
 public class AuthUtil {
 	private AuthUtil() {
-
 	}
 
 	public static AuthDescriptor getAuthInfo() {
 		// 获取相应的认证信息，先从环境变量中取，然后从系统属性中取
 		AuthDescriptor auth = null;
 		auth = getAuthInfoFromEnv();
-		//
-		if (null != getAuthInfoFromProps())
+		if (null != getAuthInfoFromProps()) {
 			auth = getAuthInfoFromProps();
+		}
+		
 		return auth;
+	}
+
+	/** 根据认证信息，获取DSS的客户端。**/
+	public static IDSSClient getDssClient(AuthDescriptor ad) throws Exception{
+		return DSSFactory.getClient(ad);
+	}
+	
+	/** 根据mongoInfo信息，获取MongoDB客户端。**/
+	public static IDSSClient getDssBaseClient(String mongoInfo) throws Exception{
+		return DSSBaseFactory.getClient(mongoInfo);
 	}
 
 	private static AuthDescriptor getAuthInfoFromEnv() {

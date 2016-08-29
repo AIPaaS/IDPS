@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.utils.AuthUtil;
@@ -31,17 +30,6 @@ public class DeleteImageServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		// 获取DSS的客户端，以便后续服务使用
-		ad = AuthUtil.getAuthInfo();
-		if (null == ad) {
-			throw new ServletException(
-					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
-		}
-		try {
-			dc = DSSFactory.getClient(ad);
-		} catch (Exception e) {
-			throw new ServletException(e);
-		}
 		super.init();
 	}
 
@@ -56,14 +44,33 @@ public class DeleteImageServlet extends HttpServlet {
 		String imageId = request.getParameter("imageId");
 		String uri = request.getRequestURI();
 		boolean success = true;
+		
+		String needAuth = request.getParameter("needAuth");
+		String mongoInfo = request.getParameter("mongoInfo");
+		System.out.println("++++++++++ needAuth:["+needAuth+"],mongoInfo:["+mongoInfo+"]++++++++++++++++++++++++++++++++++");
+		
+		try {
+			if ("true".equals(needAuth)) {
+				ad = AuthUtil.getAuthInfo();
+				if (null == ad) {
+					throw new ServletException(
+							"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
+				}
+				dc = AuthUtil.getDssClient(ad);
+			} else {
+				dc = AuthUtil.getDssBaseClient(mongoInfo);
+			}
+		} catch (Exception ex) {
+			throw new ServletException("++++++++++++++ DeleteImageServlet initialized dssClient exception ++++++++++++++");
+		}
 
 		dc.delete(imageId);
 		JsonObject json = new JsonObject();
 		json.addProperty("result", success ? "success" : "failure");
 		log.debug(uri + "-------------------:共耗时"
 				+ (System.currentTimeMillis() - begin) + "ms");
+		
 		response(response, new Gson().toJson(json));
-
 	}
 
 	private void response(HttpServletResponse response, String result) {
@@ -87,7 +94,7 @@ public class DeleteImageServlet extends HttpServlet {
 			} catch (Exception e) {
 				log.error("", e);
 			}
-
 		}
 	}
+	
 }

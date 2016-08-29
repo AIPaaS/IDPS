@@ -49,29 +49,39 @@ public class AuthFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token");
-		if (StringUtil.isBlank(token)) {
-			// 返回认证失败
-			checkFail(resp);
-			return;
+		
+		if(req.getParameter("needAuth").equals("true")) {
+			System.out.println("++++++++++++++++++++++++++ AuthFilter.doFilter() ++++++++++++++++++++++++++");
+			ad = AuthUtil.getAuthInfo();
+			if (null == ad) {
+				throw new ServletException(
+						"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
+			}
+			
+			if (!StringUtil.isBlank(token)) {
+				// 返回认证失败
+				checkFail(resp);
+				return;
+			}
+			// 开始解密
+			String params = CiperUtil.decrypt(AuthConstant.IDPS_SEC_KEY, token);
+			if (StringUtil.isBlank(params)) {
+				checkFail(resp);
+				return;
+			}
+			//每次都认证一下？上传和删除还可以
+			JsonObject json = gson.fromJson(params, JsonObject.class);
+			ad.setPid(json.get("pid").getAsString());
+			ad.setPassword(json.get("srvPwd").getAsString());
+			ad.setServiceId(json.get("srvId").getAsString());
+			AuthResult authResult = UserClientFactory.getUserClient().auth(ad);
+			if (null == authResult || null == authResult.getUserId()) {
+				checkFail(resp);
+				return;
+			}
+			// pass the request along the filter chain
+			chain.doFilter(request, response);
 		}
-		// 开始解密
-		String params = CiperUtil.decrypt(AuthConstant.IDPS_SEC_KEY, token);
-		if (StringUtil.isBlank(params)) {
-			checkFail(resp);
-			return;
-		}
-		//每次都认证一下？上传和删除还可以
-		JsonObject json = gson.fromJson(params, JsonObject.class);
-		ad.setPid(json.get("pid").getAsString());
-		ad.setPassword(json.get("srvPwd").getAsString());
-		ad.setServiceId(json.get("srvId").getAsString());
-		AuthResult authResult = UserClientFactory.getUserClient().auth(ad);
-		if (null == authResult || null == authResult.getUserId()) {
-			checkFail(resp);
-			return;
-		}
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
 	}
 
 	private void checkFail(HttpServletResponse resp) throws IOException,
@@ -87,11 +97,7 @@ public class AuthFilter implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		ad = AuthUtil.getAuthInfo();
-		if (null == ad) {
-			throw new ServletException(
-					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
-		}
+		System.out.println("++++++++++++++++++++++++++ AuthFilter.init() ++++++++++++++++++++++++++");
 	}
 
 }
