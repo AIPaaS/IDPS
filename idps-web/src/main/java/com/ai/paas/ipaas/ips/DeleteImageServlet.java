@@ -20,17 +20,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class DeleteImageServlet extends HttpServlet {
-
+	private static final Logger log = LogManager.getLogger(DeleteImageServlet.class);
 	private static final long serialVersionUID = 1594325791647123L;
-
-	private static final Logger log = LogManager
-			.getLogger(DeleteImageServlet.class);
+	
 	private AuthDescriptor ad = null;
 	private IDSSClient dc = null;
 
 	@Override
 	public void init() throws ServletException {
-		super.init();
+		System.out.println("------------------------ DeleteImageServlet init() ------------------------");
 	}
 
 	@Override

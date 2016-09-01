@@ -14,24 +14,16 @@ import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 public class ImageUtil {
 	private static final Logger log = LogManager.getLogger(ImageUtil.class);
 
-	private IImageService imageSv;
-
-	private AuthDescriptor ad;
+	private IImageService imageSv = null;
 
 	public ImageUtil(AuthDescriptor ad) {
-		this.ad = ad;
+		this.imageSv = new GMImageServiceImpl(ad);
 	}
 
-	private IImageService getIntance() {
-
-		if (null != imageSv)
-			return imageSv;
-		else {
-			imageSv = new GMImageServiceImpl(ad);
-			return imageSv;
-		}
+	public ImageUtil(String mongoInfo) {
+		this.imageSv = new GMImageServiceImpl(mongoInfo);
 	}
-
+	
 	/**
 	 * 1、本地原图是否存在 2、存在时，生成缩略图；不存在，从mongodb获得原图保存在本地，并生成缩略图
 	 * 
@@ -53,14 +45,14 @@ public class ImageUtil {
 			String imageType, boolean isExtent) throws Exception {
 		long begin = System.currentTimeMillis();
 		// 处理图片路径
-		boolean localExist = getIntance().isLocalImageExist(imageName,
+		boolean localExist = imageSv.isLocalImageExist(imageName,
 				imageType);
 		log.debug(uri + "--------localExist---------:" + localExist + " 耗时"
 				+ (System.currentTimeMillis() - begin));
 
 		if (!localExist) {
 			begin = System.currentTimeMillis();
-			getIntance().getRomteImage(imageName, imageType);
+			imageSv.getRomteImage(imageName, imageType);
 			log.debug(uri + "--------getRomteImage---------" + " 耗时"
 					+ (System.currentTimeMillis() - begin));
 
@@ -68,9 +60,9 @@ public class ImageUtil {
 		String path = null;
 		if (imageSize == null) {
 			// 源图
-			path = getIntance().getSourceImagePath(imageName, imageType);
+			path = imageSv.getSourceImagePath(imageName, imageType);
 		} else {
-			path = getIntance().scaleImage(uri, imageName, 1, imageSize,
+			path = imageSv.scaleImage(uri, imageName, 1, imageSize,
 					imageType, isExtent);
 		}
 		log.debug(uri + "--------getScaleImage---------:" + localExist + " 耗时"
@@ -86,7 +78,7 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public boolean getGMMode() {
-		return getIntance().isGMMode();
+		return imageSv.isGMMode();
 	}
 
 	/**
@@ -96,11 +88,11 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public String getReservePath() {
-		return getIntance().getReservePath();
+		return imageSv.getReservePath();
 	}
 
 	public boolean isSupported(String imageType) {
-		return getIntance().isSupported(imageType);
+		return imageSv.isSupported(imageType);
 	}
 
 	/**
@@ -112,11 +104,11 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public void convertType(String srcImage, String descImage) throws Exception {
-		getIntance().convertType(srcImage, descImage);
+		imageSv.convertType(srcImage, descImage);
 	}
 
 	public boolean judgeSize(String srcImage, int minWidth, int minHeight) {
-		return getIntance().judgeSize(srcImage, minWidth, minHeight);
+		return imageSv.judgeSize(srcImage, minWidth, minHeight);
 	}
 
 	/**
@@ -126,7 +118,7 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public String getUplodPath() {
-		return getIntance().getUplodPath();
+		return imageSv.getUplodPath();
 	}
 
 	/**
@@ -136,7 +128,7 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public String getDestPath() {
-		return getIntance().getDestPath();
+		return imageSv.getDestPath();
 	}
 
 	/**
@@ -146,7 +138,7 @@ public class ImageUtil {
 	 * @throws Exception
 	 */
 	public String getSupportType(String ext) {
-		return getIntance().getSupportType(ext);
+		return imageSv.getSupportType(ext);
 	}
 
 	public static void main(String[] args) {

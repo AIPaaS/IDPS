@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.utils.AuthUtil;
@@ -65,6 +66,7 @@ public class ImageServlet extends HttpServlet {
 				util = new ImageUtil(ad);
 				dc = AuthUtil.getDssClient(ad);
 			} else {
+				util = new ImageUtil(mongoInfo);
 				dc = AuthUtil.getDssBaseClient(mongoInfo);
 			}
 		} catch (Exception ex) {

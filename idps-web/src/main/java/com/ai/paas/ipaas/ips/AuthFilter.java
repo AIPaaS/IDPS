@@ -49,9 +49,12 @@ public class AuthFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token");
+		System.out.println("+++++++++++++ AuthFilter.doFilter().needAuth:["+req.getParameter("needAuth")+"].");
 		
-		if(req.getParameter("needAuth").equals("true")) {
-			System.out.println("++++++++++++++++++++++++++ AuthFilter.doFilter() ++++++++++++++++++++++++++");
+		if(req.getParameter("needAuth").equals("false")) {
+			chain.doFilter(req, resp);
+		}else{
+			System.out.println("+++++++++++++ AuthFilter.doFilter() +++++++++++++");
 			ad = AuthUtil.getAuthInfo();
 			if (null == ad) {
 				throw new ServletException(
@@ -97,7 +100,6 @@ public class AuthFilter implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		System.out.println("++++++++++++++++++++++++++ AuthFilter.init() ++++++++++++++++++++++++++");
 	}
 
 }

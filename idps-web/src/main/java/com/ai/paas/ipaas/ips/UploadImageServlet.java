@@ -29,13 +29,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class UploadImageServlet extends HttpServlet {
-
-	/**
-	 * 
-	 */
+	private static final Logger log = Logger.getLogger(UploadImageServlet.class);
 	private static final long serialVersionUID = -914574498046477046L;
-	private static final Logger log = Logger
-			.getLogger(UploadImageServlet.class);
 
 	private AuthDescriptor ad = null;
 	private IDSSClient dc = null;
@@ -44,7 +39,7 @@ public class UploadImageServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		super.init();
+		System.out.println("------------------------ UploadImageServlet init() ------------------------");
 	}
 
 	@Override
@@ -66,6 +61,7 @@ public class UploadImageServlet extends HttpServlet {
 				util = new ImageUtil(ad);
 				dc = AuthUtil.getDssClient(ad);
 			} else {
+				util = new ImageUtil(mongoInfo);
 				dc = AuthUtil.getDssBaseClient(mongoInfo);
 			}
 		} catch (Exception ex) {

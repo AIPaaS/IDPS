@@ -12,6 +12,7 @@ import org.gm4java.engine.support.GMConnectionPoolConfig;
 import org.gm4java.engine.support.PooledGMService;
 
 import com.ai.paas.ipaas.dss.DSSFactory;
+import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -19,11 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class GMClient {
-
-	private static transient final Logger log = Logger
-			.getLogger(GMClient.class);
-
-	private GMService gmService;
+	private static transient final Logger log = Logger.getLogger(GMClient.class);
 
 	private static final String GM_PATH_KEY = "gmPath";
 	private static final String MAX_ACTIVE_KEY = "maxActive";
@@ -37,6 +34,8 @@ public class GMClient {
 	private static final String EXTENT_KEY = "extent";
 	private static final String QUALITY_KEY = "quality";
 
+	private GMService gmService;
+	
 	// 本地保存图片的路径 源图
 	private String imageSrcRoot = null;
 	// 图片名分隔符 _
@@ -49,13 +48,16 @@ public class GMClient {
 	private int quality = 90;
 
 	private Gson gson = new Gson();
-
-	private AuthDescriptor ad = null;
 	private IDSSClient dc = null;
 
+	/**
+	 * 使用服务认证模式，初始化GMClient，获取IDSSClient。
+	 * @param parameter
+	 * @param ad
+	 */
 	public GMClient(String parameter, AuthDescriptor ad) {
 		try {
-			this.ad = ad;
+			dc = DSSFactory.getClient(ad);
 			JsonObject paras = gson.fromJson(parameter, JsonObject.class);
 
 			if (paras != null) {
@@ -76,17 +78,48 @@ public class GMClient {
 						.getAsString();
 				this.extent = paras.get(EXTENT_KEY).getAsBoolean();
 				this.quality = paras.get(QUALITY_KEY).getAsInt();
-
 			}
-
 		} catch (Exception e) {
 			log.error("", e);
 		}
 	}
 
 	/**
-	 * @param imageName
-	 *            源图名
+	 * 使用sdk模式，初始化GMClient，通过mongoInfo信息，获取IDSSClient。
+	 * @param parameter
+	 * @param mongoInfo
+	 */
+	public GMClient(String parameter, String mongoInfo) {
+		try {
+			dc = DSSBaseFactory.getClient(mongoInfo);
+			JsonObject paras = gson.fromJson(parameter, JsonObject.class);
+
+			if (paras != null) {
+				GMConnectionPoolConfig config = new GMConnectionPoolConfig();
+				config.setMaxActive(paras.get(MAX_ACTIVE_KEY).getAsInt());
+				config.setMaxIdle(paras.get(MAX_IDLE_KEY).getAsInt());
+				config.setMaxWait(paras.get(MAX_WAIT_KEY).getAsLong());
+				config.setTestOnGet(paras.get(TEST_ON_BORROW_KEY)
+						.getAsBoolean());
+				config.setTestOnReturn(paras.get(TEST_ON_RETURN_KEY)
+						.getAsBoolean());
+				config.setGMPath(paras.get(GM_PATH_KEY).getAsString());
+				this.gmService = new PooledGMService(config);
+
+				this.imageSrcRoot = paras.get(IMAGE_SRC_ROOT).getAsString();
+				this.imageNameSplit = paras.get(IMAGE_NAME_SPLIT).getAsString();
+				this.imageTargetRoot = paras.get(IMAGE_TARGET_ROOT)
+						.getAsString();
+				this.extent = paras.get(EXTENT_KEY).getAsBoolean();
+				this.quality = paras.get(QUALITY_KEY).getAsInt();
+			}
+		} catch (Exception e) {
+			log.error("", e);
+		}
+	}
+	
+	/**
+	 * @param imageName 源图名
 	 * @return
 	 * @throws Exception
 	 */
@@ -114,8 +147,7 @@ public class GMClient {
 	}
 
 	/**
-	 * @param imageId
-	 *            源图名
+	 * @param imageId 源图名
 	 * @throws Exception
 	 */
 	public void getRomteImage(String imageId, String imageType)
@@ -126,7 +158,6 @@ public class GMClient {
 				+ getSecondPath(imageId) + File.separator + imageId + imageType;
 		try {
 			File file = new File(imageName);
-			dc = DSSFactory.getClient(ad);
 			byte[] readin = dc.read(imageId);
 			FileOutputStream fos = null;
 			fos = new FileOutputStream(file);
@@ -185,7 +216,6 @@ public class GMClient {
 	 */
 	public void addImgText(String srcPath, String targetPath) throws Exception {
 		// 暂时不实现
-
 	}
 
 	/**

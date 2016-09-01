@@ -1,7 +1,6 @@
 package com.ai.paas.ipaas.ips.service.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -19,9 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class GMImageServiceImpl implements IImageService {
-
-	private static transient final Logger log = LogManager
-			.getLogger(GMImageServiceImpl.class);
+	private static transient final Logger log = LogManager.getLogger(GMImageServiceImpl.class);
+	
 	private String confFile = "/idps.properties";
 	private String confPath = "/com/ai/paas/ipaas/idps/conf";
 
@@ -36,38 +34,66 @@ public class GMImageServiceImpl implements IImageService {
 
 	// 是否开启graphicsmagick模式
 	private boolean gmMode = true;
+	
 	// 异常时，返回异常图片的路径
 	private String reserveImage = null;
+	
 	private List<String> types = null;
+	
 	// 上传图片 本地存放路径
 	private String uploadPath;
+	
 	// 上传图片 转换格式后的本地路径
 	private String destPath;
 
 	private GMClient gmClient;
-	private AuthDescriptor ad = null;
-
-	public void init(AuthDescriptor ad) {
-		this.ad = ad;
-		AuthResult authResult = UserClientFactory.getUserClient().auth(ad);
-		Assert.notNull(authResult, ResourceUtil
-				.getMessage("com.ai.paas.ipaas.common.auth_result_null"));
-
-		// 开始初始化
-		Assert.notNull(authResult.getConfigAddr(), ResourceUtil
-				.getMessage("com.ai.paas.ipaas.common.zk_addr_null"));
-		Assert.notNull(authResult.getConfigUser(), ResourceUtil
-				.getMessage("com.ai.paas.ipaas.common.zk_user_null"));
-		Assert.notNull(authResult.getConfigPasswd(), ResourceUtil
-				.getMessage("com.ai.paas.ipaas.common.zk_passwd_null"));
-
-		processConfig();
-	}
 
 	public GMImageServiceImpl(AuthDescriptor ad) {
 		init(ad);
 	}
+	
+	public GMImageServiceImpl(String mongoInfo) {
+		init(mongoInfo);
+	}
+	
+	public void init(AuthDescriptor ad) {
+		AuthResult authResult = UserClientFactory.getUserClient().auth(ad);
+		Assert.notNull(authResult, ResourceUtil.getMessage("com.ai.paas.ipaas.common.auth_result_null"));
+		Assert.notNull(authResult.getConfigAddr(), ResourceUtil.getMessage("com.ai.paas.ipaas.common.zk_addr_null"));
+		Assert.notNull(authResult.getConfigUser(), ResourceUtil.getMessage("com.ai.paas.ipaas.common.zk_user_null"));
+		Assert.notNull(authResult.getConfigPasswd(), ResourceUtil.getMessage("com.ai.paas.ipaas.common.zk_passwd_null"));
 
+		String config = null;
+		try {
+			/** 加载并解析属性文件 **/
+			Properties props = new Properties();
+			props.load(this.getClass().getResourceAsStream(confFile));
+			config = props.getProperty(confPath);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		gmClient = new GMClient(config, ad);
+
+		processConfig(config);
+	}
+
+	public void init(String mongoInfo) {
+		String config = null;
+		try {
+			/** 加载并解析属性文件 **/
+			Properties props = new Properties();
+			props.load(this.getClass().getResourceAsStream(confFile));
+			config = props.getProperty(confPath);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		gmClient = new GMClient(config, mongoInfo);
+
+		processConfig(config);
+	}
+	
 	@Override
 	public boolean isLocalImageExist(String localPath, String imageType)
 			throws Exception {
@@ -98,22 +124,10 @@ public class GMImageServiceImpl implements IImageService {
 		gmClient.removeLocalSizedImage(path);
 	}
 
-	private void processConfig() {
-		// GM的配置信息路径
-		String config = null;
-
-		// 加载属性文件
-		Properties props = new Properties();
-		try {
-			props.load(this.getClass().getResourceAsStream(confFile));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		// 获取属性文件
-		config = props.getProperty(confPath);
-		gmClient = new GMClient(config, ad);
+	private void processConfig(String config) {
 		Gson gson = new Gson();
 		JsonObject json = gson.fromJson(config, JsonObject.class);
+		
 		imageType = json.get(IMAGE_TYPE_KEY).getAsString();
 		if (imageType == null || "".equals(imageType)) {
 			types = Arrays.asList(new String[] { ".jpg" });
