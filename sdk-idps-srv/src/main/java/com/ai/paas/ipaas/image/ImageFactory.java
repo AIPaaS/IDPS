@@ -20,16 +20,14 @@ import com.ai.paas.ipaas.uac.vo.AuthResult;
 import com.ai.paas.ipaas.util.Assert;
 import com.google.gson.Gson;
 
-public class ImageClientFactory {
-	private static transient final Logger log = LoggerFactory
-			.getLogger(ImageClientFactory.class);
+public class ImageFactory {
+	private static transient final Logger log = LoggerFactory.getLogger(ImageFactory.class);
 	private static Map<String, IImageClient> imageClients = new ConcurrentHashMap<String, IImageClient>();
 	private final static String SEARCH_CONFIG_PATH = "/IDPS/";
 	public static final String IMAGE_URL_PATH = "IMAGEURL";
 	public static final String IMAGE_URL_OUT_PATH = "/IMAGEURL_OUT";
 
-	private ImageClientFactory() {
-
+	private ImageFactory() {
 	}
 
 	@SuppressWarnings("unchecked")
@@ -51,34 +49,31 @@ public class ImageClientFactory {
 		Assert.notNull(authResult.getConfigAddr(), "ConfigAddr is blank");
 		Assert.notNull(authResult.getConfigUser(), "ConfigUser is blank");
 		Assert.notNull(authResult.getConfigPasswd(), "ConfigPasswd is blank");
+		
 		// // 获取内部zk地址后取得该用户的cache配置信息，返回JSON String
 		// // 获取该用户申请的cache服务配置信息
 		log.info("Get confBase&conf ...");
 		String userId = authResult.getUserId();
-		ICCSComponent client = CCSComponentFactory.getConfigClient(
-				authResult.getConfigAddr(), authResult.getConfigUser(),
-				authResult.getConfigPasswd());
+		ICCSComponent client = CCSComponentFactory.getConfigClient(authResult.getConfigAddr(),
+				authResult.getConfigUser(), authResult.getConfigPasswd());
 
-		String imageConfig = CCSComponentFactory.getConfigClient(
-				authResult.getConfigAddr(), authResult.getConfigUser(),
-				authResult.getConfigPasswd()).get(SEARCH_CONFIG_PATH + srvId);
+		String imageConfig = CCSComponentFactory
+				.getConfigClient(authResult.getConfigAddr(), authResult.getConfigUser(), authResult.getConfigPasswd())
+				.get(SEARCH_CONFIG_PATH + srvId);
 		Map<String, String> configM = new HashMap<String, String>();
 		configM = gson.fromJson(imageConfig, configM.getClass());
 		String imageUrl = configM.get(IMAGE_URL_PATH);
 		// String imageUrl = "http://10.1.235.199:8086/iPaas-IDPS";
-		IDPSWatch watch = new IDPSWatch(client, userPid, userId, srvId,
-				ad.getPassword(), imageUrl);
-		String imageUrlOutM = CCSComponentFactory.getConfigClient(
-				authResult.getConfigAddr(), authResult.getConfigUser(),
-				authResult.getConfigPasswd()).get(
-				SEARCH_CONFIG_PATH + srvId + IMAGE_URL_OUT_PATH, watch);
+		IDPSWatch watch = new IDPSWatch(client, userPid, userId, srvId, ad.getPassword(), imageUrl);
+		String imageUrlOutM = CCSComponentFactory
+				.getConfigClient(authResult.getConfigAddr(), authResult.getConfigUser(), authResult.getConfigPasswd())
+				.get(SEARCH_CONFIG_PATH + srvId + IMAGE_URL_OUT_PATH, watch);
 
 		Map<String, String> configMO = new HashMap<String, String>();
 		configMO = gson.fromJson(imageUrlOutM, Map.class);
 
 		String imageUrlOut = configMO.get(IMAGE_URL_PATH);
-		iImageClient = new ImageClientImpl(userPid, srvId, ad.getPassword(),
-				imageUrl, imageUrlOut);
+		iImageClient = new ImageClientImpl(true, userPid, srvId, ad.getPassword(), "", imageUrl, imageUrlOut);
 		imageClients.put(userPid + "_" + srvId, iImageClient);
 		return iImageClient;
 	}
@@ -97,8 +92,8 @@ public class ImageClientFactory {
 		private String servicePwd;
 		private String imageUrl;
 
-		public IDPSWatch(ICCSComponent client, String userPid, String userId,
-				String serviceId, String srvPwd, String imageUrl) {
+		public IDPSWatch(ICCSComponent client, String userPid, String userId, String serviceId, String srvPwd,
+				String imageUrl) {
 			this.client = client;
 			this.serviceId = serviceId;
 			this.userPid = userPid;
@@ -120,10 +115,8 @@ public class ImageClientFactory {
 
 					IImageClient iImageClient = null;
 
-					String imageUrlOut = client.get(SEARCH_CONFIG_PATH
-							+ serviceId + IMAGE_URL_OUT_PATH, this);
-					iImageClient = new ImageClientImpl(userPid, serviceId,
-							servicePwd, imageUrl, imageUrlOut);
+					String imageUrlOut = client.get(SEARCH_CONFIG_PATH + serviceId + IMAGE_URL_OUT_PATH, this);
+					iImageClient = new ImageClientImpl(true, userPid, serviceId, servicePwd, "", imageUrl, imageUrlOut);
 					imageClients.put(userPid + "_" + serviceId, iImageClient);
 				} catch (PaasException e) {
 					log.error("投票结果变化时，读取出错：" + e.getMessage(), e);
@@ -131,9 +124,7 @@ public class ImageClientFactory {
 			} else {
 				log.info("---eventType---FinalWatch--" + eventType);
 			}
-
 		}
-
 	}
 
 }

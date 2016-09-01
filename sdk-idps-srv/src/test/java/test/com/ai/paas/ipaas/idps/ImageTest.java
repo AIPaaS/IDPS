@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.ai.paas.ipaas.image.IImageClient;
-import com.ai.paas.ipaas.image.ImageClientFactory;
+import com.ai.paas.ipaas.image.ImageFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 
 public class ImageTest {
@@ -21,7 +21,7 @@ public class ImageTest {
 		ad = new AuthDescriptor(AUTH_ADDR, "0A8111DB280044528DF309D501DFFF6A",
 				"123456", "IDPS020");
 		try {
-			im = ImageClientFactory.getClient(ad);
+			im = ImageFactory.getClient(ad);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
