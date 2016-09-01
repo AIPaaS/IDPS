@@ -28,7 +28,6 @@ public class DeleteImageServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		System.out.println("------------------------ DeleteImageServlet init() ------------------------");
 	}
 
 	@Override
@@ -45,7 +44,6 @@ public class DeleteImageServlet extends HttpServlet {
 		
 		String needAuth = request.getParameter("needAuth");
 		String mongoInfo = request.getParameter("mongoInfo");
-		System.out.println("++++++++++ needAuth:["+needAuth+"],mongoInfo:["+mongoInfo+"]++++++++++++++++++++++++++++++++++");
 		
 		try {
 			if ("true".equals(needAuth)) {
@@ -59,7 +57,7 @@ public class DeleteImageServlet extends HttpServlet {
 				dc = AuthUtil.getDssBaseClient(mongoInfo);
 			}
 		} catch (Exception ex) {
-			throw new ServletException("++++++++++++++ DeleteImageServlet initialized dssClient exception ++++++++++++++");
+			throw new ServletException("DeleteImageServlet service exception");
 		}
 
 		dc.delete(imageId);

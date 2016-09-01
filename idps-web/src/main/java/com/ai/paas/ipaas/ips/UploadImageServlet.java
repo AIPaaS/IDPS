@@ -39,7 +39,6 @@ public class UploadImageServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		System.out.println("------------------------ UploadImageServlet init() ------------------------");
 	}
 
 	@Override
@@ -50,7 +49,6 @@ public class UploadImageServlet extends HttpServlet {
 
 		String needAuth = request.getParameter("needAuth");
 		String mongoInfo = request.getParameter("mongoInfo");
-		System.out.println("++++++++++ needAuth:["+needAuth+"],mongoInfo:["+mongoInfo+"] +++++++++++++++");
 		try {
 			if ("true".equals(needAuth)) {
 				ad = AuthUtil.getAuthInfo();
@@ -65,7 +63,7 @@ public class UploadImageServlet extends HttpServlet {
 				dc = AuthUtil.getDssBaseClient(mongoInfo);
 			}
 		} catch (Exception ex) {
-			throw new ServletException("++++++++++++++ UploadImageServlet initialized dssClient exception ++++++++++++++");
+			throw new ServletException("UploadImageServlet service exception");
 		}
 		
 		boolean success = false;

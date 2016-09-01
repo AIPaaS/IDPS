@@ -126,35 +126,17 @@ public class ImageClientImpl implements IImageClient {
 
 	@Override
 	public byte[] getImage(String imageId, String imageType, String imageScale) {
-		byte[] bytes = null;
-
 		String downloadUrl = "";
 		if (StringUtils.isEmpty(imageScale)) {
 			downloadUrl = imageUrl + "/image/" + imageId + imageType + "?needAuth=" + needAuth;
 		} else {
 			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType + "?needAuth=" + needAuth;
 		}
-		
 		if(!needAuth) {
 			downloadUrl = downloadUrl + "&mongoInfo=" + mongoInfo;
 		}
 		
-		log.info("Start to download " + downloadUrl);
-		HttpClient client = new HttpClient();
-		GetMethod httpGet = new GetMethod(downloadUrl);
-		try {
-			client.executeMethod(httpGet);
-			if (200 == httpGet.getStatusCode()) {
-				bytes = httpGet.getResponseBody();
-				log.info("Successfully download " + downloadUrl);
-			}
-		} catch (Exception e) {
-			log.error("download " + imageId + "." + imageType + ", scale: " + imageScale, e);
-		} finally {
-			httpGet.releaseConnection();
-		}
-		
-		return bytes;
+		return HttpUtil.getImage(downloadUrl);
 	}
 
 	private String createToken() {

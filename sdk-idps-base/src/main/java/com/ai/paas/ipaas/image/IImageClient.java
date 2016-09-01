@@ -89,8 +89,7 @@ public interface IImageClient {
 	 *            图片尺寸 例如：800x800
 	 * @return
 	 */
-	public InputStream getImageStream(String imageId, String imageType,
-			String imageScale);
+	public InputStream getImageStream(String imageId, String imageType, String imageScale);
 
 	/**
 	 * 下载图片，不负责关闭输入流

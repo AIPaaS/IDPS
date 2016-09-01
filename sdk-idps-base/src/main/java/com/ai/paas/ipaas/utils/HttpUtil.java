@@ -12,15 +12,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class HttpUtil {
-	private static int connectionTimeout = 60000;
-
-	private static int readTimeout = 60000;
-
 	private static final Log logger = LogFactory.getLog(HttpUtil.class);
+	
+	private static int connectionTimeout = 60000;
+	private static int readTimeout = 60000;
 
 	/**
 	 * 图片服务器 上传图片
-	 * 
 	 * @param url
 	 * @return
 	 */
@@ -31,11 +29,7 @@ public class HttpUtil {
 		String result = "";
 
 		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Attempting to access " + url);
-			}
 			URL logoutUrl = new URL(url);
-
 			connection = (HttpURLConnection) logoutUrl.openConnection();
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
@@ -51,7 +45,6 @@ public class HttpUtil {
 			connection.setRequestProperty("minWidth", "" + minWidth);
 			connection.setRequestProperty("minHeight", "" + minHeight);
 			connection.setRequestProperty("token", token);
-			// 这里加安全
 
 			DataOutputStream out = new DataOutputStream(
 					connection.getOutputStream());
@@ -86,6 +79,7 @@ public class HttpUtil {
 			if (connection != null)
 				connection.disconnect();
 		}
+		
 		return null;
 	}
 
@@ -113,6 +107,8 @@ public class HttpUtil {
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
 			connection.setRequestProperty("token", token);
+			connection.connect();
+			connection.getInputStream();
 			
 			if (200 == connection.getResponseCode()) {
 				result = true;
@@ -125,6 +121,55 @@ public class HttpUtil {
 		} finally {
 			if (connection != null)
 				connection.disconnect();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 获取图片
+	 * @param url
+	 * @return byte[]
+	 */
+	public static byte[] getImage(String url) {
+		HttpURLConnection connection = null;
+		BufferedReader in  = null;
+		byte[] result = null;
+
+		try {
+			URL logoutUrl = new URL(url);
+			connection = (HttpURLConnection) logoutUrl.openConnection();
+			connection.setDoInput(true);
+			connection.setDoOutput(true);
+			connection.setUseCaches(false);
+			connection.setRequestMethod("POST");
+			connection.setReadTimeout(readTimeout);
+			connection.setConnectTimeout(connectionTimeout);
+			connection.setRequestProperty("connection", "Keep-Alive");
+			connection.setRequestProperty("Charsert", "UTF-8");
+			connection.setRequestProperty("Content-type", "application/x-java-serialized-object");
+			connection.connect();
+			
+		    String line = null ;
+		    StringBuilder sb = new StringBuilder ();;
+		    in  = new BufferedReader( new InputStreamReader(connection.getInputStream()));
+            while ((line = in.readLine()) != null ) {
+                 sb.append(line + "/n" );
+            }
+            result = sb.toString().getBytes();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.error("", e);
+				}
+			}
+			if (connection != null) {
+				connection.disconnect();
+			}
 		}
 		
 		return result;
