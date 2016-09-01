@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-packageName: ipaas-idps-base
-Built-By: gradle 2.1
-create-date: 2016-08-26 11:26:17
-
