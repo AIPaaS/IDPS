@@ -25,14 +25,14 @@ public class ImageClientImpl implements IImageClient {
 	private String pId;
 	private String srvId;
 	private String srvPwd;
-	private boolean needAuth;
+	private String isAuth;
 	private String mongoInfo;
 	private String imageUrl;
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(boolean needAuth, String pId, String srvId, String srvPwd, String mongoInfo, String imageUrl, String imageUrlInter) {
-		this.needAuth = needAuth;
+	public ImageClientImpl(String needAuth, String pId, String srvId, String srvPwd, String mongoInfo, String imageUrl, String imageUrlInter) {
+		this.isAuth = needAuth;
 		this.pId = pId;
 		this.srvId = srvId;
 		this.srvPwd = srvPwd;
@@ -42,7 +42,7 @@ public class ImageClientImpl implements IImageClient {
 	}
 
 	public String upLoadImage(byte[] image, String name) {
-		return upLoadImage(image, name, 0, 0);
+		return upLoadImage(image, name, 0, 0, isAuth);
 	}
 
 	public String getImgServerInterAddr() {
@@ -81,9 +81,9 @@ public class ImageClientImpl implements IImageClient {
 		return in;
 	}
 
-	public boolean deleteImage(String imageId) {
+	public boolean deleteImage(String imageId, String isAuth) {
 		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
-		return HttpUtil.delImage(deleteUrl, createToken());
+		return HttpUtil.delImage(deleteUrl, createToken(), isAuth);
 	}
 
 	private String imageTypeFormat(String imageType) {
@@ -146,7 +146,7 @@ public class ImageClientImpl implements IImageClient {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String upLoadImage(byte[] image, String name, int minWidth, int minHeight) {
+	public String upLoadImage(byte[] image, String name, int minWidth, int minHeight, String isAuth) {
 
 		if (image == null)
 			return null;
@@ -162,7 +162,7 @@ public class ImageClientImpl implements IImageClient {
 		}
 		
 		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken());
+		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken(), isAuth);
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
 		if (null != json && null != json.get("result") && "success".equals(json.get("result"))) {

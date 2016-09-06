@@ -48,7 +48,7 @@ public class UploadImageServlet extends HttpServlet {
 					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
 		}
 		try {
-			if (null != ad.getIsNeedAuth() && "true".equals(ad.getIsNeedAuth())) {
+			if (AuthConstant.NEED_AUTH.equals(ad.getIsNeedAuth())) {
 				dc = DSSFactory.getClient(ad);
 			} else {
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());

@@ -50,12 +50,11 @@ public class AuthFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token");
 		String isAuth = req.getHeader("isAuth");
-		System.out.println("+++++++++++++ AuthFilter.doFilter().needAuth:["+isAuth+"].");
+		System.out.println("+++++ AuthFilter.doFilter().needAuth:["+isAuth+"]. +++++");
 		
-		if(req.getParameter("isAuth").equals("false")) {
+		if(AuthConstant.NEED_AUTH.equals(req.getParameter("isAuth"))) {
 			chain.doFilter(req, resp);
 		}else{
-			System.out.println("+++++++++++++ AuthFilter.doFilter() +++++++++++++");
 			ad = AuthUtil.getAuthInfo();
 			if (null == ad) {
 				throw new ServletException(

@@ -1,14 +1,11 @@
 package com.ai.paas.ipaas.ips;
 
 public class AuthConstant {
-	private AuthConstant() {
-
-	}
-
 	/**
 	 * 认证地址
 	 */
 	public final static String AUTH_URL = "AUTH_URL";
+	
 	/**
 	 * 认证用户的PID
 	 */
@@ -23,6 +20,11 @@ public class AuthConstant {
 	 * 服务标识
 	 */
 	public final static String AUTH_SRV_ID = "AUTH_SRV_ID";
+	
+	/**
+	 * 需要认证的标识
+	 */
+	public final static String NEED_AUTH = "true";
 	
 	public final static String IDPS_SEC_KEY="byjsy7!@#bjwqt7!";
 }
