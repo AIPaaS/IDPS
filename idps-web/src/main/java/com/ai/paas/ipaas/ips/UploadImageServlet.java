@@ -16,11 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.ai.paas.ipaas.dss.DSSFactory;
+import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
-import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.utils.AuthUtil;
 import com.ai.paas.ipaas.utils.ImageUtil;
+import com.ai.paas.ipaas.utils.SubAuthDescriptor;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -32,13 +34,30 @@ public class UploadImageServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger(UploadImageServlet.class);
 	private static final long serialVersionUID = -914574498046477046L;
 
-	private AuthDescriptor ad = null;
+	private SubAuthDescriptor ad = null;
 	private IDSSClient dc = null;
-	private Gson gson = new Gson();
 	private ImageUtil util;
+	
+	private Gson gson = new Gson();
 
 	@Override
 	public void init() throws ServletException {
+		ad = AuthUtil.getAuthInfo();
+		if (null == ad) {
+			throw new ServletException(
+					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
+		}
+		try {
+			if (null != ad.getIsNeedAuth() && "true".equals(ad.getIsNeedAuth())) {
+				dc = DSSFactory.getClient(ad);
+			} else {
+				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
+			}	
+		} catch (Exception e) {
+			throw new ServletException(e);
+		}
+		util = new ImageUtil(ad);
+		super.init();
 	}
 
 	@Override
@@ -47,25 +66,6 @@ public class UploadImageServlet extends HttpServlet {
 		HttpServletRequest request = (HttpServletRequest) arg0;
 		HttpServletResponse response = (HttpServletResponse) arg1;
 
-		String needAuth = request.getParameter("needAuth");
-		String mongoInfo = request.getParameter("mongoInfo");
-		try {
-			if ("true".equals(needAuth)) {
-				ad = AuthUtil.getAuthInfo();
-				if (null == ad) {
-					throw new ServletException(
-							"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
-				}
-				util = new ImageUtil(ad);
-				dc = AuthUtil.getDssClient(ad);
-			} else {
-				util = new ImageUtil(mongoInfo);
-				dc = AuthUtil.getDssBaseClient(mongoInfo);
-			}
-		} catch (Exception ex) {
-			throw new ServletException("UploadImageServlet service exception");
-		}
-		
 		boolean success = false;
 		log.debug("----保存本地图片----------------");
 		String filename = null;
