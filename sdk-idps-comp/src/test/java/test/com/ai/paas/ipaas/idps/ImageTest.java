@@ -13,7 +13,6 @@ import com.ai.paas.ipaas.image.ImageCmpFactory;
 
 public class ImageTest {
 	private static String imageUrl = "http://127.0.0.1:8080/idps-web";
-	private static String mongoInfo = "{\"mongoServer\":\"10.1.245.226:37037\",\"database\":\"image\",\"userName\":\"idps\",\"password\":\"idps\",\"bucket\":\"fs\"}";
 	
 	@Test
 	public void uploadImageTest() {
@@ -37,7 +36,7 @@ public class ImageTest {
 		}
 		
 		try {
-			ImageCmpFactory factory = new ImageCmpFactory(imageUrl, mongoInfo);
+			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 			IImageClient im = factory.getClient();
 			String id = im.upLoadImage(buffer, "555.png");
 			System.out.println(id);

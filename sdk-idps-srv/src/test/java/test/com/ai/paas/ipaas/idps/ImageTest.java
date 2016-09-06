@@ -29,12 +29,10 @@ public class ImageTest {
 
 	@Test
 	public void deTest() {
-
 		// System.out.println(im.getUpImageUrl());
 		byte[] buffer = null;
 		try {
-			File file = new File(
-					"d:/234.png");
+			File file = new File("d:/234.png");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -62,13 +60,12 @@ public class ImageTest {
 	}
 	@Test
 	public void deleteTest() {
-		System.out.println(im.deleteImage("574835f0c9e77c000768f594", "false"));
+		System.out.println(im.deleteImage("574835f0c9e77c000768f594"));
 
 	}
 	
 	@Test
 	public void downTest() {
-
 		im.getImage("56aa08347960b60009db8a3d", ".jpg", "");
 		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
 

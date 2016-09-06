@@ -18,7 +18,6 @@ import com.ai.paas.ipaas.uac.service.UserClientFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.uac.vo.AuthResult;
 import com.ai.paas.ipaas.util.Assert;
-import com.ai.paas.ipaas.utils.IdpsContant;
 import com.google.gson.Gson;
 
 public class ImageFactory {
@@ -74,7 +73,7 @@ public class ImageFactory {
 		configMO = gson.fromJson(imageUrlOutM, Map.class);
 
 		String imageUrlOut = configMO.get(IMAGE_URL_PATH);
-		iImageClient = new ImageClientImpl(IdpsContant.NEED_AUTH, userPid, srvId, ad.getPassword(), "", imageUrl, imageUrlOut);
+		iImageClient = new ImageClientImpl(userPid, srvId, ad.getPassword(), imageUrl, imageUrlOut);
 		imageClients.put(userPid + "_" + srvId, iImageClient);
 		return iImageClient;
 	}
@@ -117,7 +116,7 @@ public class ImageFactory {
 					IImageClient iImageClient = null;
 
 					String imageUrlOut = client.get(SEARCH_CONFIG_PATH + serviceId + IMAGE_URL_OUT_PATH, this);
-					iImageClient = new ImageClientImpl(IdpsContant.NEED_AUTH, userPid, serviceId, servicePwd, "", imageUrl, imageUrlOut);
+					iImageClient = new ImageClientImpl(userPid, serviceId, servicePwd, imageUrl, imageUrlOut);
 					imageClients.put(userPid + "_" + serviceId, iImageClient);
 				} catch (PaasException e) {
 					log.error("投票结果变化时，读取出错：" + e.getMessage(), e);

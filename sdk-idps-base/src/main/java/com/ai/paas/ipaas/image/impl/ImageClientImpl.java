@@ -25,24 +25,20 @@ public class ImageClientImpl implements IImageClient {
 	private String pId;
 	private String srvId;
 	private String srvPwd;
-	private String isAuth;
-	private String mongoInfo;
 	private String imageUrl;
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(String needAuth, String pId, String srvId, String srvPwd, String mongoInfo, String imageUrl, String imageUrlInter) {
-		this.isAuth = needAuth;
+	public ImageClientImpl(String pId, String srvId, String srvPwd, String imageUrl, String imageUrlInter) {
 		this.pId = pId;
 		this.srvId = srvId;
 		this.srvPwd = srvPwd;
-		this.mongoInfo = mongoInfo;
 		this.imageUrl = imageUrl;
 		this.imageUrlInter = imageUrlInter;
 	}
 
 	public String upLoadImage(byte[] image, String name) {
-		return upLoadImage(image, name, 0, 0, isAuth);
+		return upLoadImage(image, name, 0, 0);
 	}
 
 	public String getImgServerInterAddr() {
@@ -81,9 +77,9 @@ public class ImageClientImpl implements IImageClient {
 		return in;
 	}
 
-	public boolean deleteImage(String imageId, String isAuth) {
+	public boolean deleteImage(String imageId) {
 		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
-		return HttpUtil.delImage(deleteUrl, createToken(), isAuth);
+		return HttpUtil.delImage(deleteUrl, createToken());
 	}
 
 	private String imageTypeFormat(String imageType) {
@@ -146,7 +142,7 @@ public class ImageClientImpl implements IImageClient {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String upLoadImage(byte[] image, String name, int minWidth, int minHeight, String isAuth) {
+	public String upLoadImage(byte[] image, String name, int minWidth, int minHeight) {
 
 		if (image == null)
 			return null;
@@ -162,7 +158,7 @@ public class ImageClientImpl implements IImageClient {
 		}
 		
 		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken(), isAuth);
+		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken());
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
 		if (null != json && null != json.get("result") && "success".equals(json.get("result"))) {

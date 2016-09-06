@@ -25,7 +25,7 @@ public interface IImageClient {
 	 * @param minHeigt
 	 * @return
 	 */
-	public String upLoadImage(byte[] image, String name,int minWidth,int minHeight, String isAuth);
+	public String upLoadImage(byte[] image, String name,int minWidth,int minHeight);
 
 	/**
 	 * 
@@ -76,7 +76,7 @@ public interface IImageClient {
 	 * @param imageId
 	 * @return
 	 */
-	public boolean deleteImage(String imageId, String isAuth);
+	public boolean deleteImage(String imageId);
 
 	/**
 	 * 下载图片，不负责关闭输入流
