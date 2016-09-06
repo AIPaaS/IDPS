@@ -49,9 +49,10 @@ public class AuthFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token");
-		System.out.println("+++++++++++++ AuthFilter.doFilter().needAuth:["+req.getParameter("needAuth")+"].");
+		String isAuth = req.getHeader("isAuth");
+		System.out.println("+++++++++++++ AuthFilter.doFilter().needAuth:["+isAuth+"].");
 		
-		if(req.getParameter("needAuth").equals("false")) {
+		if(req.getParameter("isAuth").equals("false")) {
 			chain.doFilter(req, resp);
 		}else{
 			System.out.println("+++++++++++++ AuthFilter.doFilter() +++++++++++++");
