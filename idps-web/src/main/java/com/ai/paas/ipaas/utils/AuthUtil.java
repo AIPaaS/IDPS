@@ -26,6 +26,8 @@ public class AuthUtil {
 			auth.setPid(System.getenv(AuthConstant.AUTH_USER_PID));
 			auth.setServiceId(System.getenv(AuthConstant.AUTH_SRV_ID));
 			auth.setPassword(System.getenv(AuthConstant.AUTH_SRV_PWD));
+			auth.setIsNeedAuth(System.getenv(AuthConstant.IS_NEED_AUTH));
+			auth.setMongoInfo(System.getenv(AuthConstant.MONGO_INFO));
 		}
 		return auth;
 	}
@@ -38,6 +40,8 @@ public class AuthUtil {
 			auth.setPid(System.getProperty(AuthConstant.AUTH_USER_PID));
 			auth.setServiceId(System.getProperty(AuthConstant.AUTH_SRV_ID));
 			auth.setPassword(System.getProperty(AuthConstant.AUTH_SRV_PWD));
+			auth.setIsNeedAuth(System.getenv(AuthConstant.IS_NEED_AUTH));
+			auth.setMongoInfo(System.getenv(AuthConstant.MONGO_INFO));
 		}
 		return auth;
 	}
