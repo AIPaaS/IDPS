@@ -62,7 +62,7 @@ public class ImageTest {
 	}
 	@Test
 	public void deleteTest() {
-		System.out.println(im.deleteImage("574835f0c9e77c000768f594"));
+		System.out.println(im.deleteImage("574835f0c9e77c000768f594", "false"));
 
 	}
 	
