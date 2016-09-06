@@ -13,13 +13,13 @@ import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 
 public class ImageTest {
 
-	private static final String AUTH_ADDR = "http://10.1.228.200:14105/service-portal-uac-web/service/auth";
+	private static final String AUTH_ADDR = "http://10.1.245.4:19811/service-portal-uac-web/service/auth";
 	private static AuthDescriptor ad = null;
 	private static IImageClient im = null;
 
 	static {
-		ad = new AuthDescriptor(AUTH_ADDR, "0A8111DB280044528DF309D501DFFF6A",
-				"123456", "IDPS020");
+		ad = new AuthDescriptor(AUTH_ADDR, "4BCEDD88820D4E5295568DA835C3FB6F",
+				"123456", "IDPS010");
 		try {
 			im = ImageFactory.getClient(ad);
 		} catch (Exception e) {
@@ -29,10 +29,9 @@ public class ImageTest {
 
 	@Test
 	public void deTest() {
-		// System.out.println(im.getUpImageUrl());
 		byte[] buffer = null;
 		try {
-			File file = new File("d:/234.png");
+			File file = new File("/Users/yuanman/Documents/666.jpg");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -48,27 +47,25 @@ public class ImageTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String id = im.upLoadImage(buffer, "234.png");
+		String id = im.upLoadImage(buffer, "666.jpg");
 
 		System.out.println(id);
 	}
 
-	@Test
-	public void seTest() {
-		System.out.println(im.getImageUrl("576b8c46c9e77c0007c34529", ".png"));
-
-	}
-	@Test
-	public void deleteTest() {
-		System.out.println(im.deleteImage("574835f0c9e77c000768f594"));
-
-	}
+//	@Test
+//	public void seTest() {
+//		System.out.println(im.getImageUrl("57ce99274cedfd0005c3676f", ".png"));
+//	}
 	
-	@Test
-	public void downTest() {
-		im.getImage("56aa08347960b60009db8a3d", ".jpg", "");
-		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
-
-	}
+//	@Test
+//	public void deleteTest() {
+//		System.out.println(im.deleteImage("574835f0c9e77c000768f594"));
+//	}
+	
+//	@Test
+//	public void downTest() {
+//		im.getImage("56aa08347960b60009db8a3d", ".jpg", "");
+//		System.out.println(im.getImageUrl("56aa08347960b60009db8a3d", ".jpg"));
+//	}
 
 }

@@ -18,7 +18,7 @@ public class ImageTest {
 	public void uploadImageTest() {
 		byte[] buffer = null;
 		try {
-			File file = new File("/Users/yuanman/Documents/777.png");
+			File file = new File("/Users/yuanman/Documents/666.jpg");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -38,8 +38,8 @@ public class ImageTest {
 		try {
 			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 			IImageClient im = factory.getClient();
-			String id = im.upLoadImage(buffer, "777.png");
-			System.out.println(id);
+			String id = im.upLoadImage(buffer, "666.jpg");
+			System.out.println("========= " +id + "==========");
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -48,9 +48,9 @@ public class ImageTest {
 //	@Test
 //	public void getImageUrlTest() {
 //		try {
-//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl, mongoInfo);
+//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 //			IImageClient im = factory.getClient();
-//			System.out.println(im.getImageUrl("57c7c9deb1c3aa4a297e30a1", ".jpg"));
+//			System.out.println(im.getImageUrl("57ce9335b1c3aa54ce707ef8", ".jpg"));
 //			/**
 //			 * http://127.0.0.1:8080/idps-web/image/57c7c9deb1c3aa4a297e30a1.jpg?needAuth=false&mongoInfo={"mongoServer":"10.1.245.226:37037","database":"image","userName":"idps","password":"idps","bucket":"fs"}
 //			 */
@@ -62,9 +62,9 @@ public class ImageTest {
 //	@Test
 //	public void deleteImageTest() {
 //		try {
-//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl, mongoInfo);
+//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 //			IImageClient im = factory.getClient();
-//			System.out.println(im.deleteImage("57c7c9deb1c3aa4a297e30a1"));
+//			System.out.println(im.deleteImage("57ce9335b1c3aa54ce707ef8"));
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}
@@ -73,10 +73,10 @@ public class ImageTest {
 //	@Test
 //	public void downloadTest() {
 //		try {
-//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl, mongoInfo);
+//			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 //			IImageClient im = factory.getClient();
-//			im.getImage("57c7c9deb1c3aa4a297e30a1", ".jpg", "");
-//			System.out.println(im.getImageUrl("57c7c9deb1c3aa4a297e30a1", ".jpg"));
+//			im.getImage("57ce9335b1c3aa54ce707ef8", ".jpg", "");
+//			System.out.println(im.getImageUrl("57ce9335b1c3aa54ce707ef8", ".jpg"));
 //		} catch (Exception ex) {
 //			ex.printStackTrace();
 //		}

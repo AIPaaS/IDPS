@@ -136,6 +136,7 @@ public class UploadImageServlet extends HttpServlet {
 				util.convertType(filename, name + util.getSupportType(ext));
 				log.debug("----保存到mongoDB----------------");
 				id = dc.save(new File(getDestPath(name, ext)), filename);
+				log.debug("----file id is:" +id+"----------------");
 				json.addProperty("id", id);
 			} catch (Exception e) {
 				success = false;
