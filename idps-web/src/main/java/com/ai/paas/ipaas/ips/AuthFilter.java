@@ -52,7 +52,7 @@ public class AuthFilter implements Filter {
 		String isAuth = req.getHeader("isAuth");
 		System.out.println("+++++ AuthFilter.doFilter().needAuth:["+isAuth+"]. +++++");
 		
-		if(AuthConstant.NEED_AUTH.equals(req.getParameter("isAuth"))) {
+		if(AuthConstant.NEED_AUTH.equals(isAuth)) {
 			chain.doFilter(req, resp);
 		}else{
 			ad = AuthUtil.getAuthInfo();
