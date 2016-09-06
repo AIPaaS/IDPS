@@ -18,7 +18,7 @@ public class ImageTest {
 	public void uploadImageTest() {
 		byte[] buffer = null;
 		try {
-			File file = new File("/Users/yuanman/Documents/555.png");
+			File file = new File("/Users/yuanman/Documents/777.png");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
@@ -38,7 +38,7 @@ public class ImageTest {
 		try {
 			ImageCmpFactory factory = new ImageCmpFactory(imageUrl);
 			IImageClient im = factory.getClient();
-			String id = im.upLoadImage(buffer, "555.png");
+			String id = im.upLoadImage(buffer, "777.png");
 			System.out.println(id);
 		}catch(Exception ex) {
 			ex.printStackTrace();

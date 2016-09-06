@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 public class ImageClientImpl implements IImageClient {
 	private static transient Logger log = LoggerFactory.getLogger(ImageClientImpl.class);
 	
+	private String isAuth;
 	private String pId;
 	private String srvId;
 	private String srvPwd;
@@ -29,7 +30,8 @@ public class ImageClientImpl implements IImageClient {
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(String pId, String srvId, String srvPwd, String imageUrl, String imageUrlInter) {
+	public ImageClientImpl(String isAuth, String pId, String srvId, String srvPwd, String imageUrl, String imageUrlInter) {
+		this.isAuth = isAuth;
 		this.pId = pId;
 		this.srvId = srvId;
 		this.srvPwd = srvPwd;
@@ -79,7 +81,7 @@ public class ImageClientImpl implements IImageClient {
 
 	public boolean deleteImage(String imageId) {
 		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
-		return HttpUtil.delImage(deleteUrl, createToken());
+		return HttpUtil.delImage(deleteUrl, createToken(), isAuth);
 	}
 
 	private String imageTypeFormat(String imageType) {
@@ -158,7 +160,7 @@ public class ImageClientImpl implements IImageClient {
 		}
 		
 		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken());
+		String result = HttpUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken(), isAuth);
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
 		if (null != json && null != json.get("result") && "success".equals(json.get("result"))) {

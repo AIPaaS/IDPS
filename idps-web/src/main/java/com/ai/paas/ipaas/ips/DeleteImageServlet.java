@@ -37,9 +37,9 @@ public class DeleteImageServlet extends HttpServlet {
 		}
 		try {
 			if (AuthConstant.NEED_AUTH.equals(ad.getIsNeedAuth())) {
-				dc = DSSFactory.getClient(ad);
-			} else {
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
+			} else {
+				dc = DSSFactory.getClient(ad);
 			}	
 		} catch (Exception e) {
 			throw new ServletException(e);

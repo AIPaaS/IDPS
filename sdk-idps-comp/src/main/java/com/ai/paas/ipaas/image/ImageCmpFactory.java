@@ -18,7 +18,7 @@ public class ImageCmpFactory {
 
 	public IImageClient getClient() throws Exception {
 		IImageClient iImageClient = null;
-		iImageClient = new ImageClientImpl("", "", "", imageUrl, imageUrl);
+		iImageClient = new ImageClientImpl("false", "", "", "", imageUrl, imageUrl);
 		imageClients.put("ImageCmpClient", iImageClient);
 		return iImageClient;
 	}

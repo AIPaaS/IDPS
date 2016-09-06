@@ -49,11 +49,11 @@ public class UploadImageServlet extends HttpServlet {
 		}
 		try {
 			if (AuthConstant.NEED_AUTH.equals(ad.getIsNeedAuth())) {
-				dc = DSSFactory.getClient(ad);
-				util = new ImageUtil(ad);
-			} else {
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
 				util = new ImageUtil(ad.getMongoInfo());
+			} else {
+				dc = DSSFactory.getClient(ad);
+				util = new ImageUtil(ad);
 			}	
 		} catch (Exception e) {
 			throw new ServletException(e);
