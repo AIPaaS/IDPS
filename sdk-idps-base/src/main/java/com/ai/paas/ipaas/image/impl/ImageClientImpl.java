@@ -22,10 +22,10 @@ import com.google.gson.JsonObject;
 public class ImageClientImpl implements IImageClient {
 	private static transient Logger log = LoggerFactory.getLogger(ImageClientImpl.class);
 	
-	private boolean needAuth;
 	private String pId;
 	private String srvId;
 	private String srvPwd;
+	private boolean needAuth;
 	private String mongoInfo;
 	private String imageUrl;
 	private String imageUrlInter;
@@ -56,13 +56,9 @@ public class ImageClientImpl implements IImageClient {
 	public InputStream getImageStream(String imageId, String imageType, String imageScale) {
 		String downloadUrl = "";
 		if (StringUtils.isEmpty(imageScale)) {
-			downloadUrl = imageUrl + "/image/" + imageId + imageType + "?needAuth=" + needAuth;
+			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
-			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType + "?needAuth=" + needAuth;
-		}
-		
-		if(!needAuth) {
-			downloadUrl = downloadUrl + "&mongoInfo=" + mongoInfo;
+			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType;
 		}
 		
 		log.info("Start to download " + downloadUrl);
@@ -86,7 +82,7 @@ public class ImageClientImpl implements IImageClient {
 	}
 
 	public boolean deleteImage(String imageId) {
-		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId + "&needAuth=" + needAuth + "&mongoInfo=" + mongoInfo;
+		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
 		return HttpUtil.delImage(deleteUrl, createToken());
 	}
 
@@ -109,7 +105,7 @@ public class ImageClientImpl implements IImageClient {
 
 	public String getImageUrl(String imageId, String imageType) {
 		imageType = imageTypeFormat(imageType);
-		return imageUrlInter + "/image/" + imageId + imageType + "?needAuth=" + needAuth + "&mongoInfo=" + mongoInfo;
+		return imageUrlInter + "/image/" + imageId + imageType;
 	}
 
 	public String getImageUrl(String imageId, String imageType, String imageScale) {
@@ -117,23 +113,20 @@ public class ImageClientImpl implements IImageClient {
 		if (imageScale != null && imageScale.contains("X")) {
 			imageScale = imageScale.replace("X", "x");
 		}
-		return imageUrlInter + "/image/" + imageId + "_" + imageScale + imageType + "?needAuth=" + needAuth + "&mongoInfo=" + mongoInfo;
+		return imageUrlInter + "/image/" + imageId + "_" + imageScale + imageType;
 	}
 
 	public String getImageUploadUrl() {
-		return imageUrl + "/uploadImage" + "?needAuth=" + needAuth + "&mongoInfo=" + mongoInfo;
+		return imageUrl + "/uploadImage";
 	}
 
 	@Override
 	public byte[] getImage(String imageId, String imageType, String imageScale) {
 		String downloadUrl = "";
 		if (StringUtils.isEmpty(imageScale)) {
-			downloadUrl = imageUrl + "/image/" + imageId + imageType + "?needAuth=" + needAuth;
+			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
-			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType + "?needAuth=" + needAuth;
-		}
-		if(!needAuth) {
-			downloadUrl = downloadUrl + "&mongoInfo=" + mongoInfo;
+			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType;
 		}
 		
 		return HttpUtil.getImage(downloadUrl);
