@@ -132,7 +132,7 @@ public class GMClient {
 				+ getFirstPath(imageName) + File.separator
 				+ getSecondPath(imageName);
 		forceMkdir(new File(localPath));
-		log.info("------------------------localPath----------------------"
+		log.debug("------------------------localPath----------------------"
 				+ localPath);
 		return new File(localPath + File.separator + imageName + imageType)
 				.exists();
@@ -203,7 +203,7 @@ public class GMClient {
 		}
 		log.debug(uri + "----GraphicsImage----scaleImage---------end 耗时"
 				+ (System.currentTimeMillis() - begin));
-		log.info(uri + "----GraphicsImage----targetPath---------" + targetPath);
+		log.debug(uri + "----GraphicsImage----targetPath---------" + targetPath);
 		return targetPath;
 	}
 

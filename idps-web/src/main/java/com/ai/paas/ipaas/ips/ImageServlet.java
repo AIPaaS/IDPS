@@ -67,7 +67,7 @@ public class ImageServlet extends HttpServlet {
 
 		String uri = request.getRequestURI();
 
-		log.debug(uri + "--service------------------");
+//		log.debug(uri + "--service------------------");
 		String imageType = getImageType(uri);
 		if (!util.isSupported(imageType)) {
 			log.error(uri + "--service------------------资源格式不支持" + imageType);
@@ -101,8 +101,8 @@ public class ImageServlet extends HttpServlet {
 				}
 			}
 			// 得到缩略图
-			log.debug(uri + "-----------imageName:" + imageName
-					+ "   ----------imageSize:" + imageSize);
+//			log.debug(uri + "-----------imageName:" + imageName
+//					+ "   ----------imageSize:" + imageSize);
 			String imagePath = "";
 			try {
 				imagePath = util.getScaleImage(uri, imageName, imageSize,
@@ -130,7 +130,7 @@ public class ImageServlet extends HttpServlet {
 						outStream.write(data, 0, count);
 					data = null;
 					outStream.flush();
-					log.debug(uri + "--return------------------ok");
+//					log.debug(uri + "--return------------------ok");
 				} catch (Exception e) {
 					log.error("uri:" + uri + ",imagePath=" + imagePath, e);
 				} finally {
@@ -150,7 +150,7 @@ public class ImageServlet extends HttpServlet {
 			// 不需要GM动态产生缩略图
 			responseMongoImage(response, uri);
 		}
-		log.debug(uri + "-------------------:共耗时"
+		log.info(uri + "-------------------:共耗时"
 				+ (System.currentTimeMillis() - begin) + "ms");
 	}
 

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
+<Configuration status="info">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d [%t] %-5p %c(%L) - %m%n" />
 		</Console>
 	</Appenders>
 	<Loggers>
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="Console"/>
         </root>
-        <logger name="com.ai" level="DEBUG" additivity="false">
+        <logger name="com.ai" level="INFO" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
-        <logger name="org.spring" level="DEBUG" additivity="false">
+        <logger name="org.spring" level="INFO" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
 	</Loggers>
