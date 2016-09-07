@@ -3,7 +3,6 @@ dependencies{
     compile 'com.ai:ipaas-common:0.3'
 }
 
-/**
 publishing {
 	publications {
 		publishing.publications.create("${moduleName}", MavenPublication) {
@@ -38,4 +37,3 @@ publishing {
 		}
 	}
 }
-**/
