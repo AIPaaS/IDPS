@@ -7,7 +7,44 @@ dependencies{
 
 publishing {
     publications {
-       publishing.publications.create("${moduleName}", MavenPublication) {
+        mavenJar(MavenPublication) {
+        	groupId group
+        	artifactId "${moduleName}"
+            artifact sourcesJar
+            version moduleVersion
+            pom.withXml {
+				asNode().children().last() + {
+					delegate.dependencies {
+						delegate.dependency {
+	                        delegate.groupId("commons-httpclient")
+	                        delegate.artifactId("commons-httpclient")
+	                        delegate.version("3.1")
+	                    }
+	                    delegate.dependency {
+	                        delegate.groupId("commons-codec")
+	                        delegate.artifactId("commons-codec")
+	                        delegate.version("1.9")
+	                    }	                    
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-common")
+							delegate.version("0.3")
+						}
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-uac")
+							delegate.version("0.3")
+						}
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-ccs-inner")
+							delegate.version("0.3")
+						}
+					}
+				}
+			}
+		}
+        publishing.publications.create("${moduleName}", MavenPublication) {
             groupId group
             artifactId moduleName
             version moduleVersion

@@ -5,11 +5,28 @@ dependencies{
 
 publishing {
 	publications {
+		mavenJar(MavenPublication) {
+        	groupId group
+        	artifactId "${moduleName}"
+            artifact sourcesJar
+            version moduleVersion
+        	pom.withXml {
+				asNode().children().last() + {
+					delegate.dependencies {
+						delegate.dependency {
+							delegate.groupId("com.ai")
+							delegate.artifactId("ipaas-idps-base")
+							delegate.version("0.3")
+						}
+					}
+				}
+			}
+		}	
 		publishing.publications.create("${moduleName}", MavenPublication) {
 			groupId group
 			artifactId moduleName
 			version moduleVersion
-			artifact  jar
+			artifact jar
 			pom.withXml {
 				asNode().children().last() + {
 					delegate.dependencies {
