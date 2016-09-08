@@ -15,5 +15,9 @@
         <logger name="org.spring" level="info" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
+        <logger name="org.mongodb" level="warn" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>        
+        
 	</Loggers>
 </Configuration>

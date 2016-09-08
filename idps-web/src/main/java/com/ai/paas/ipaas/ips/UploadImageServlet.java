@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
@@ -154,22 +154,22 @@ public class UploadImageServlet extends HttpServlet {
 	}
 
 	private void response(HttpServletResponse response, String result) {
-		ServletOutputStream outStream = null;
+		PrintWriter writer = null;
 		try {
 			response.setHeader("Pragma", "No-cache");
 			response.setHeader("Cache-Control", "no-cache");
 			response.setDateHeader("Expires", 0);
 			response.setContentType("text/html;charset=UTF-8");
-			outStream = response.getOutputStream();
-			outStream.print(result);
-			outStream.flush();
+			writer = response.getWriter();
+			writer.print(result);
+			writer.flush();
 			log.debug("--return------------------ok");
 		} catch (Exception e) {
 			log.error("" + result, e);
 		} finally {
 			try {
-				if (outStream != null) {
-					outStream.close();
+				if (writer != null) {
+					writer.close();
 				}
 			} catch (Exception e) {
 				log.error("", e);
