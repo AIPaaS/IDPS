@@ -13,16 +13,18 @@ import org.apache.commons.logging.LogFactory;
 
 public class HttpUtil {
 	private static final Log logger = LogFactory.getLog(HttpUtil.class);
-	
+
 	private static int connectionTimeout = 60000;
 	private static int readTimeout = 60000;
 
 	/**
 	 * 图片服务器 上传图片
+	 * 
 	 * @param url
 	 * @return
 	 */
-	public static String upImage(String url, byte[] image, String name, int minWidth, int minHeight, String token, String needAuth) {
+	public static String upImage(String url, byte[] image, String name,
+			int minWidth, int minHeight, String token, String needAuth) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
 		String result = "";
@@ -38,14 +40,16 @@ public class HttpUtil {
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
 			connection.setRequestProperty("Content-Type",
-					"multipart/form-data; boundary=gc0p4Jq0M2Yt08jU534c0p;file=" + name);
+					"multipart/form-data; boundary=gc0p4Jq0M2Yt08jU534c0p;file="
+							+ name);
 			connection.setRequestProperty("filename", name);
 			connection.setRequestProperty("minWidth", "" + minWidth);
 			connection.setRequestProperty("minHeight", "" + minHeight);
 			connection.setRequestProperty("token", token);
 			connection.setRequestProperty("needAuth", needAuth);
 
-			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+			DataOutputStream out = new DataOutputStream(
+					connection.getOutputStream());
 
 			out.write(image);
 			out.flush();
@@ -60,6 +64,10 @@ public class HttpUtil {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Finished sending message to" + url);
 				}
+			} else {
+				logger.error("url:" + url + ", return code:"
+						+ connection.getResponseCode() + ",respMsg:"
+						+ connection.getResponseMessage());
 			}
 			return result;
 		} catch (SocketTimeoutException e) {
@@ -77,12 +85,13 @@ public class HttpUtil {
 			if (connection != null)
 				connection.disconnect();
 		}
-		
+
 		return null;
 	}
 
 	/**
 	 * 图片服务器 删除图片
+	 * 
 	 * @param url
 	 * @return
 	 */
@@ -108,7 +117,7 @@ public class HttpUtil {
 			connection.setRequestProperty("needAuth", needAuth);
 			connection.connect();
 			connection.getInputStream();
-			
+
 			if (200 == connection.getResponseCode()) {
 				result = true;
 			}
@@ -121,18 +130,19 @@ public class HttpUtil {
 			if (connection != null)
 				connection.disconnect();
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * 获取图片
+	 * 
 	 * @param url
 	 * @return byte[]
 	 */
 	public static byte[] getImage(String url) {
 		HttpURLConnection connection = null;
-		BufferedReader in  = null;
+		BufferedReader in = null;
 		byte[] result = null;
 
 		try {
@@ -146,16 +156,18 @@ public class HttpUtil {
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
-			connection.setRequestProperty("Content-type", "application/x-java-serialized-object");
+			connection.setRequestProperty("Content-type",
+					"application/x-java-serialized-object");
 			connection.connect();
-			
-		    String line = null ;
-		    StringBuilder sb = new StringBuilder ();
-		    in  = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-            while ((line = in.readLine()) != null ) {
-                 sb.append(line + "/n" );
-            }
-            result = sb.toString().getBytes();
+
+			String line = null;
+			StringBuilder sb = new StringBuilder();
+			in = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			while ((line = in.readLine()) != null) {
+				sb.append(line + "/n");
+			}
+			result = sb.toString().getBytes();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		} finally {
@@ -170,7 +182,7 @@ public class HttpUtil {
 				connection.disconnect();
 			}
 		}
-		
+
 		return result;
 	}
 }
