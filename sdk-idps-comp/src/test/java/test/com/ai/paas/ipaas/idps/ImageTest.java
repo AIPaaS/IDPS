@@ -12,7 +12,9 @@ import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.paas.ipaas.image.ImageCmpFactory;
 
 public class ImageTest {
-	private static String imageUrl = "http://127.0.0.1:8080/iPaas-IDPS/";
+	private static String imageUrl = "http://10.1.245.226:18000/iPaas-IDPS/";
+	//private static String imageUrl = "http://127.0.0.1:8080/idps-web/";
+	
 
 	@Test
 	public void uploadImageTest() {
