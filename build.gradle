@@ -53,7 +53,7 @@ project("sdk-idps-base"){
     jar {
         baseName moduleName
         version moduleVersion
-        include 'com/ai/paas/ipaas/idps/**'
+        include 'com/ai/paas/ipaas/image/**'
         manifest {
             attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
@@ -81,7 +81,7 @@ project("sdk-idps-comp"){
     jar {
         baseName moduleName
         version moduleVersion
-        include 'com/ai/paas/ipaas/idps/**'
+        include 'com/ai/paas/ipaas/image/**'
         manifest {
             attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
@@ -109,7 +109,7 @@ project("sdk-idps-srv"){
     jar {
         baseName moduleName
         version moduleVersion
-        include 'com/ai/paas/ipaas/idps/**'
+        include 'com/ai/paas/ipaas/image/**'
         manifest {
             attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
