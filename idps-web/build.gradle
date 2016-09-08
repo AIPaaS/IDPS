@@ -62,7 +62,7 @@ dependencies{
 }
 
 war {
-    baseName = "idps-web"
+    baseName = "iPaaS-IDPS"
 }
 
 jar {
