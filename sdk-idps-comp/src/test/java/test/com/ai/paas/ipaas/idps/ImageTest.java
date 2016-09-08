@@ -12,13 +12,13 @@ import com.ai.paas.ipaas.image.IImageClient;
 import com.ai.paas.ipaas.image.ImageCmpFactory;
 
 public class ImageTest {
-	private static String imageUrl = "http://127.0.0.1:8080/idps-web/";
+	private static String imageUrl = "http://127.0.0.1:8080/iPaas-IDPS/";
 
 	@Test
 	public void uploadImageTest() {
 		byte[] buffer = null;
 		try {
-			File file = new File("/Users/yuanman/Documents/666.jpg");
+			File file = new File("d:/003.jpg");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];

@@ -29,7 +29,7 @@ public class ImageCmpFactory {
 		if (interUrl.endsWith("/"))
 			interUrl = interUrl.substring(0, interUrl.lastIndexOf("/"));
 		if (intraUrl.endsWith("/"))
-			intraUrl = intraUrl.substring(0, interUrl.lastIndexOf("/"));
+			intraUrl = intraUrl.substring(0, intraUrl.lastIndexOf("/"));
 
 		// 判断一下是否有
 		if (null != imageClients.get(interUrl))
