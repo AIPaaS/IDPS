@@ -31,7 +31,7 @@ public class ImageTest {
 	public void deTest() {
 		byte[] buffer = null;
 		try {
-			File file = new File("/Users/yuanman/Documents/666.jpg");
+			File file = new File("d:/003.jpg");
 			FileInputStream fis = new FileInputStream(file);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
 			byte[] b = new byte[1000];
