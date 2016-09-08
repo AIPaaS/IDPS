@@ -19,10 +19,10 @@ import org.apache.log4j.Logger;
 import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
+import com.ai.paas.ipaas.image.ImageAuthDescriptor;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.utils.AuthUtil;
 import com.ai.paas.ipaas.utils.ImageUtil;
-import com.ai.paas.ipaas.utils.SubAuthDescriptor;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -31,13 +31,14 @@ import com.google.gson.JsonObject;
  *
  */
 public class UploadImageServlet extends HttpServlet {
-	private static final Logger log = Logger.getLogger(UploadImageServlet.class);
+	private static final Logger log = Logger
+			.getLogger(UploadImageServlet.class);
 	private static final long serialVersionUID = -914574498046477046L;
 
-	private SubAuthDescriptor ad = null;
+	private ImageAuthDescriptor ad = null;
 	private IDSSClient dc = null;
 	private ImageUtil util;
-	
+
 	private Gson gson = new Gson();
 
 	@Override
@@ -45,16 +46,16 @@ public class UploadImageServlet extends HttpServlet {
 		ad = AuthUtil.getAuthInfo();
 		if (null == ad) {
 			throw new ServletException(
-					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
+					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID -DisCompMode -DmongoInfo");
 		}
 		try {
-			if (AuthConstant.NEED_AUTH.equals(ad.getIsNeedAuth())) {
+			if (ad.isCompMode()) {
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
 				util = new ImageUtil(ad.getMongoInfo());
 			} else {
 				dc = DSSFactory.getClient(ad);
 				util = new ImageUtil(ad);
-			}	
+			}
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
@@ -108,7 +109,7 @@ public class UploadImageServlet extends HttpServlet {
 			if (null != in)
 				in.close();
 		}
-		
+
 		if (success) {
 			String name = getName();
 			String id = "";
@@ -127,7 +128,7 @@ public class UploadImageServlet extends HttpServlet {
 				if (null != minHeight) {
 					_minHeight = Integer.parseInt(minHeight);
 				}
-				
+
 				if (!util.judgeSize(filename, _minWidth, _minHeight)) {
 					throw new ImageSizeIllegalException(
 							"Image Size is illegal,minWidth:" + minWidth
@@ -136,7 +137,7 @@ public class UploadImageServlet extends HttpServlet {
 				util.convertType(filename, name + util.getSupportType(ext));
 				log.debug("----保存到mongoDB----------------");
 				id = dc.save(new File(getDestPath(name, ext)), filename);
-				log.debug("----file id is:" +id+"----------------");
+				log.debug("----file id is:" + id + "----------------");
 				json.addProperty("id", id);
 			} catch (Exception e) {
 				success = false;
@@ -148,7 +149,7 @@ public class UploadImageServlet extends HttpServlet {
 			}
 		}
 		json.addProperty("result", success ? "success" : "failure");
-		
+
 		response(response, gson.toJson(json));
 	}
 

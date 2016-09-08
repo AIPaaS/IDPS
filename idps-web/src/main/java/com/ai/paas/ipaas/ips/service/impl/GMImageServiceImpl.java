@@ -20,8 +20,8 @@ import com.google.gson.JsonObject;
 public class GMImageServiceImpl implements IImageService {
 	private static transient final Logger log = LogManager.getLogger(GMImageServiceImpl.class);
 	
-	private String confFile = "/idps.properties";
-	private String confPath = "/com/ai/paas/ipaas/idps/conf";
+	private String confFile = "/gm.properties";
+	private String confPath = "/com/ai/paas/ipaas/idps/gm/conf";
 
 	private static final String GM_MODE_KEY = "gmMode";
 	private static final String RESERVE_IMAGE_KEY = "reserveImage";

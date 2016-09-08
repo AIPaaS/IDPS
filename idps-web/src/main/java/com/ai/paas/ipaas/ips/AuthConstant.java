@@ -24,17 +24,13 @@ public class AuthConstant {
 	/**
 	 * 是否需要auth
 	 */
-	public final static String IS_NEED_AUTH = "IS_NEED_AUTH";
+	public final static String IS_COMP_MODE = "isCompMode";
 	
 	/**
 	 * mongoDB信息
 	 */
-	public final static String MONGO_INFO = "MONGO_INFO";
+	public final static String MONGO_INFO = "mongoInfo";
 	
-	/**
-	 * 需要认证的标识
-	 */
-	public final static String NEED_AUTH = "false";
 	
 	public final static String IDPS_SEC_KEY="byjsy7!@#bjwqt7!";
 }

@@ -86,13 +86,13 @@ public class GMClient {
 
 	/**
 	 * 使用sdk模式，初始化GMClient，通过mongoInfo信息，获取IDSSClient。
-	 * @param parameter
+	 * @param props
 	 * @param mongoInfo
 	 */
-	public GMClient(String parameter, String mongoInfo) {
+	public GMClient(String props, String mongoInfo) {
 		try {
 			dc = DSSBaseFactory.getClient(mongoInfo);
-			JsonObject paras = gson.fromJson(parameter, JsonObject.class);
+			JsonObject paras = gson.fromJson(props, JsonObject.class);
 
 			if (paras != null) {
 				GMConnectionPoolConfig config = new GMConnectionPoolConfig();

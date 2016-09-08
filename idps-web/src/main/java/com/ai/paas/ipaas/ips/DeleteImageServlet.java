@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 import com.ai.paas.ipaas.dss.DSSFactory;
 import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
 import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
+import com.ai.paas.ipaas.image.ImageAuthDescriptor;
 import com.ai.paas.ipaas.utils.AuthUtil;
-import com.ai.paas.ipaas.utils.SubAuthDescriptor;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -25,7 +25,7 @@ public class DeleteImageServlet extends HttpServlet {
 	private static final Logger log = LogManager.getLogger(DeleteImageServlet.class);
 	private static final long serialVersionUID = 1594325791647123L;
 	
-	private SubAuthDescriptor ad = null;
+	private ImageAuthDescriptor ad = null;
 	private IDSSClient dc = null;
 
 	@Override
@@ -36,7 +36,7 @@ public class DeleteImageServlet extends HttpServlet {
 					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID");
 		}
 		try {
-			if (AuthConstant.NEED_AUTH.equals(ad.getIsNeedAuth())) {
+			if (ad.isCompMode()) {
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
 			} else {
 				dc = DSSFactory.getClient(ad);
