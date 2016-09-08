@@ -11,3 +11,12 @@
 /idps-web/.gradle
 /idps-web/.springBeans
 /bin/
+/sdk-idps-base/.settings
+/sdk-idps-base/bin
+/sdk-idps-base/.classpath
+/sdk-idps-base/.project
+/sdk-idps-comp/.settings
+/sdk-idps-comp/bin
+/sdk-idps-comp/.classpath
+/sdk-idps-comp/.project
+/sdk-idps-srv/bin
