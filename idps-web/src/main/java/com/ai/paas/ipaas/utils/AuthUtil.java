@@ -18,17 +18,17 @@ public class AuthUtil {
 	public static ImageAuthDescriptor getAuthInfo() {
 		// 获取相应的认证信息，先从环境变量中取，然后从系统属性中取
 		ImageAuthDescriptor auth = new ImageAuthDescriptor();
-		//先取属性文件，属性文件默认是服务模式，没问题
+		// 先取属性文件，属性文件默认是服务模式，没问题
 		auth = getIDPSInfoFromProps(auth);
-		auth.setCompMode(null != System.getenv(AuthConstant.IS_COMP_MODE)
-				&& "true".equalsIgnoreCase(System
-						.getenv(AuthConstant.IS_COMP_MODE)) ? true : false);
+		if (null != System.getenv(AuthConstant.IS_COMP_MODE))
+			auth.setCompMode("true".equalsIgnoreCase(System
+					.getenv(AuthConstant.IS_COMP_MODE)) ? true : false);
 		auth = getAuthInfoFromEnv(auth);
-		auth.setCompMode(null != System.getenv(AuthConstant.IS_COMP_MODE)
-				&& "true".equalsIgnoreCase(System
-						.getProperty(AuthConstant.IS_COMP_MODE)) ? true : false);
+		if (null != System.getProperty(AuthConstant.IS_COMP_MODE))
+			auth.setCompMode("true".equalsIgnoreCase(System
+					.getProperty(AuthConstant.IS_COMP_MODE)) ? true : false);
 		auth = getAuthInfoFromSysProps(auth);
-		
+
 		return auth;
 	}
 
@@ -65,7 +65,9 @@ public class AuthUtil {
 					.getProperty(AuthConstant.AUTH_SRV_PWD)))
 				auth.setPassword(System.getProperty(AuthConstant.AUTH_SRV_PWD));
 		} else {
-			auth.setMongoInfo(System.getProperty(AuthConstant.MONGO_INFO));
+			if (!StringUtil
+					.isBlank(System.getProperty(AuthConstant.MONGO_INFO)))
+				auth.setMongoInfo(System.getProperty(AuthConstant.MONGO_INFO));
 		}
 		return auth;
 	}
