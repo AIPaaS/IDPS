@@ -1,4 +1,4 @@
- Pull base image  
+# Pull base image  
 FROM centos:7  
   
 # Install GraphicsMagick  
