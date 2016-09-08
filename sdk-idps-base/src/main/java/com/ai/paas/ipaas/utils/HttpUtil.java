@@ -22,7 +22,7 @@ public class HttpUtil {
 	 * @param url
 	 * @return
 	 */
-	public static String upImage(String url, byte[] image, String name, int minWidth, int minHeight, String token, String isAuth) {
+	public static String upImage(String url, byte[] image, String name, int minWidth, int minHeight, String token, String needAuth) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
 		String result = "";
@@ -43,7 +43,7 @@ public class HttpUtil {
 			connection.setRequestProperty("minWidth", "" + minWidth);
 			connection.setRequestProperty("minHeight", "" + minHeight);
 			connection.setRequestProperty("token", token);
-			connection.setRequestProperty("isAuth", isAuth);
+			connection.setRequestProperty("needAuth", needAuth);
 
 			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 
@@ -86,7 +86,7 @@ public class HttpUtil {
 	 * @param url
 	 * @return
 	 */
-	public static boolean delImage(String url, String token, String isAuth) {
+	public static boolean delImage(String url, String token, String needAuth) {
 		HttpURLConnection connection = null;
 		boolean result = false;
 
@@ -105,7 +105,7 @@ public class HttpUtil {
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
 			connection.setRequestProperty("token", token);
-			connection.setRequestProperty("isAuth", isAuth);
+			connection.setRequestProperty("needAuth", needAuth);
 			connection.connect();
 			connection.getInputStream();
 			
