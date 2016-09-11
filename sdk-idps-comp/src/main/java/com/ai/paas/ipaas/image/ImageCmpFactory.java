@@ -34,7 +34,7 @@ public class ImageCmpFactory {
 		// 判断一下是否有
 		if (null != imageClients.get(interUrl))
 			return imageClients.get(interUrl);
-		iImageClient = new ImageClientImpl("false", "", "", "", intraUrl,
+		iImageClient = new ImageClientImpl(null,null, null, intraUrl,
 				interUrl);
 		imageClients.put("ImageCmpClient", iImageClient);
 		return iImageClient;
