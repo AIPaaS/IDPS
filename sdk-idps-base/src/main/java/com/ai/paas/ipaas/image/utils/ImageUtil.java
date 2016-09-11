@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.utils;
+package com.ai.paas.ipaas.image.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,8 +11,10 @@ import java.net.URL;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class HttpUtil {
-	private static final Log logger = LogFactory.getLog(HttpUtil.class);
+import com.ai.paas.ipaas.util.StringUtil;
+
+public class ImageUtil {
+	private static final Log logger = LogFactory.getLog(ImageUtil.class);
 
 	private static int connectionTimeout = 60000;
 	private static int readTimeout = 60000;
@@ -24,7 +26,7 @@ public class HttpUtil {
 	 * @return
 	 */
 	public static String upImage(String url, byte[] image, String name,
-			int minWidth, int minHeight, String token, String needAuth) {
+			int minWidth, int minHeight, String token) {
 		HttpURLConnection connection = null;
 		BufferedReader in = null;
 		String result = "";
@@ -45,8 +47,8 @@ public class HttpUtil {
 			connection.setRequestProperty("filename", name);
 			connection.setRequestProperty("minWidth", "" + minWidth);
 			connection.setRequestProperty("minHeight", "" + minHeight);
-			connection.setRequestProperty("token", token);
-			connection.setRequestProperty("needAuth", needAuth);
+			if (!StringUtil.isBlank(token))
+				connection.setRequestProperty("token", token);
 
 			DataOutputStream out = new DataOutputStream(
 					connection.getOutputStream());
@@ -95,7 +97,7 @@ public class HttpUtil {
 	 * @param url
 	 * @return
 	 */
-	public static boolean delImage(String url, String token, String needAuth) {
+	public static boolean delImage(String url, String token) {
 		HttpURLConnection connection = null;
 		boolean result = false;
 
@@ -113,8 +115,8 @@ public class HttpUtil {
 			connection.setConnectTimeout(connectionTimeout);
 			connection.setRequestProperty("connection", "Keep-Alive");
 			connection.setRequestProperty("Charsert", "UTF-8");
-			connection.setRequestProperty("token", token);
-			connection.setRequestProperty("needAuth", needAuth);
+			if (!StringUtil.isBlank(token))
+				connection.setRequestProperty("token", token);
 			connection.connect();
 			connection.getInputStream();
 

@@ -12,10 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import com.ai.paas.ipaas.PaasRuntimeException;
 import com.ai.paas.ipaas.image.IImageClient;
+import com.ai.paas.ipaas.image.IdpsContant;
 import com.ai.paas.ipaas.image.exception.ImageSizeIllegalException;
+import com.ai.paas.ipaas.image.utils.ImageUtil;
 import com.ai.paas.ipaas.util.CiperUtil;
-import com.ai.paas.ipaas.utils.HttpUtil;
-import com.ai.paas.ipaas.utils.IdpsContant;
+import com.ai.paas.ipaas.util.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -23,7 +24,6 @@ public class ImageClientImpl implements IImageClient {
 	private static transient Logger log = LoggerFactory
 			.getLogger(ImageClientImpl.class);
 
-	private String needAuth;
 	private String pId;
 	private String srvId;
 	private String srvPwd;
@@ -31,9 +31,8 @@ public class ImageClientImpl implements IImageClient {
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(String needAuth, String pId, String srvId,
-			String srvPwd, String imageUrl, String imageUrlInter) {
-		this.needAuth = needAuth;
+	public ImageClientImpl(String pId, String srvId, String srvPwd,
+			String imageUrl, String imageUrlInter) {
 		this.pId = pId;
 		this.srvId = srvId;
 		this.srvPwd = srvPwd;
@@ -86,7 +85,7 @@ public class ImageClientImpl implements IImageClient {
 
 	public boolean deleteImage(String imageId) {
 		String deleteUrl = imageUrl + "/deleteImage?imageId=" + imageId;
-		return HttpUtil.delImage(deleteUrl, createToken(), needAuth);
+		return ImageUtil.delImage(deleteUrl, createToken());
 	}
 
 	private String imageTypeFormat(String imageType) {
@@ -135,11 +134,13 @@ public class ImageClientImpl implements IImageClient {
 					+ imageType;
 		}
 
-		return HttpUtil.getImage(downloadUrl);
+		return ImageUtil.getImage(downloadUrl);
 	}
 
 	private String createToken() {
 		String token = null;
+		if (StringUtil.isBlank(pId))
+			return token;
 		Gson gson = new Gson();
 		JsonObject json = new JsonObject();
 		json.addProperty("pid", this.pId);
@@ -169,8 +170,8 @@ public class ImageClientImpl implements IImageClient {
 		}
 
 		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = HttpUtil.upImage(upUrl, image, name, minWidth,
-				minHeight, createToken(), needAuth);
+		String result = ImageUtil.upImage(upUrl, image, name, minWidth,
+				minHeight, createToken());
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
 		if (null != json && null != json.get("result")
