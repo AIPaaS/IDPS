@@ -11,11 +11,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ai.paas.ipaas.image.ImageAuthDescriptor;
 import com.ai.paas.ipaas.uac.service.UserClientFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 import com.ai.paas.ipaas.uac.vo.AuthResult;
 import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.utils.AuthUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -23,8 +25,8 @@ import com.google.gson.JsonObject;
  * Servlet Filter implementation class AuthFilter
  */
 public class AuthFilter implements Filter {
-	private AuthDescriptor ad = null;
 	private Gson gson = new Gson();
+	private ImageAuthDescriptor imageAD = null;
 
 	/**
 	 * Default constructor.
@@ -48,9 +50,8 @@ public class AuthFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token");
-		String needAuth = req.getHeader("needAuth");
 
-		if ("false".equalsIgnoreCase(needAuth)) {
+		if (imageAD.isCompMode()) {
 			chain.doFilter(req, resp);
 		} else {
 			if (StringUtil.isBlank(token)) {
@@ -65,6 +66,7 @@ public class AuthFilter implements Filter {
 				return;
 			}
 			// 每次都认证一下？上传和删除还可以
+			AuthDescriptor ad = new AuthDescriptor();
 			JsonObject json = gson.fromJson(params, JsonObject.class);
 			ad.setPid(json.get("pid").getAsString());
 			ad.setPassword(json.get("srvPwd").getAsString());
@@ -74,6 +76,7 @@ public class AuthFilter implements Filter {
 				checkFail(resp);
 				return;
 			}
+			ad = null;
 			// pass the request along the filter chain
 			chain.doFilter(request, response);
 		}
@@ -92,6 +95,12 @@ public class AuthFilter implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
+		imageAD = AuthUtil.getAuthInfo();
+		if (null == imageAD) {
+			throw new ServletException(
+					"Can not get auth info, pls. set in ENV or -DAUTH_URL=XXX -DAUTH_USER_PID -DAUTH_SRV_PWD -DAUTH_SRV_ID -DisCompMode -DmongoInfo");
+		}
+
 	}
 
 }
