@@ -53,7 +53,6 @@ dependencies{
 	compile "javax.servlet:javax.servlet-api:3.1.0"
 	compile "javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
 	
-	compile "org.mongodb:mongo-java-driver:3.2.0"
 	compile 'org.javassist:javassist:3.19.0-GA'
 
 	testCompile "junit:junit:4.11"
