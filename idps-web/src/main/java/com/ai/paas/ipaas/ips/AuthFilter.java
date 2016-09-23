@@ -68,6 +68,7 @@ public class AuthFilter implements Filter {
 			// 每次都认证一下？上传和删除还可以
 			AuthDescriptor ad = new AuthDescriptor();
 			JsonObject json = gson.fromJson(params, JsonObject.class);
+			ad.setAuthAdress(imageAD.getAuthAdress());
 			ad.setPid(json.get("pid").getAsString());
 			ad.setPassword(json.get("srvPwd").getAsString());
 			ad.setServiceId(json.get("srvId").getAsString());
