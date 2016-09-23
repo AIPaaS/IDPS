@@ -29,6 +29,10 @@ RUN rm -fr /opt/apache-tomcat-8.0.35/webapps/*
 
 COPY ./build/libs/iPaaS-IDPS.war /opt/apache-tomcat-8.0.35/webapps/iPaas-IDPS.war
 
+#设置时区
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo 'Asia/Shanghai' > /etc/timezone
+
 ENV CATALINA_HOME /opt/apache-tomcat-8.0.35  
 ENV PATH $PATH:$CATALINA_HOME/bin:/opt/freeware/GraphicsMagick/bin  
 ENV PATH $CATALINA_HOME/bin:$PATH
