@@ -10,7 +10,8 @@ import org.apache.logging.log4j.Logger;
 /** 
  * 基于注解的定时器 
  * @author sunhz 
- */   
+ */
+
 public class LogListener {
 	private static final Logger logger = LogManager.getLogger(LogListener.class.getName());
 
