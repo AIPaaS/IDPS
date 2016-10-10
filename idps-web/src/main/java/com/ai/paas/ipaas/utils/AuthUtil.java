@@ -84,6 +84,7 @@ public class AuthUtil {
 							.getProperty(AuthConstant.IS_COMP_MODE)) ? true
 					: false);
 			auth.setMongoInfo(props.getProperty(AuthConstant.MONGO_INFO));
+			log.info("MongoInfo---"+auth.getMongoInfo());
 		} catch (Exception e) {
 			log.info("", e);
 		}

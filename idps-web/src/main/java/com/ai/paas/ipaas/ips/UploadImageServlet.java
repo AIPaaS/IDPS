@@ -50,6 +50,7 @@ public class UploadImageServlet extends HttpServlet {
 		}
 		try {
 			if (ad.isCompMode()) {
+				log.info("MongoDB Info:"+ad.getMongoInfo());
 				dc = DSSBaseFactory.getClient(ad.getMongoInfo());
 				util = new ImageUtil(ad.getMongoInfo());
 			} else {
