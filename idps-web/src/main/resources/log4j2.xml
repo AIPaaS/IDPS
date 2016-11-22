@@ -28,6 +28,9 @@
         </logger>
         <logger name="org.mongodb" level="warn" additivity="false">
             <appender-ref ref="RollingFile"/>
+        </logger>
+        <logger name="org.apache.zookeeper" level="WARN" additivity="false">
+            <appender-ref ref="RollingFile"/>
         </logger>               
 	</Loggers>
 </Configuration>
