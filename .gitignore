@@ -20,3 +20,5 @@
 /sdk-idps-comp/.classpath
 /sdk-idps-comp/.project
 /sdk-idps-srv/bin
+/build/
+/.gradle/
