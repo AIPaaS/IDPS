@@ -21,8 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class ImageClientImpl implements IImageClient {
-	private static transient Logger log = LoggerFactory
-			.getLogger(ImageClientImpl.class);
+	private static transient Logger log = LoggerFactory.getLogger(ImageClientImpl.class);
 
 	private String pId;
 	private String srvId;
@@ -31,8 +30,7 @@ public class ImageClientImpl implements IImageClient {
 	private String imageUrlInter;
 	private Gson gson = new Gson();
 
-	public ImageClientImpl(String pId, String srvId, String srvPwd,
-			String imageUrl, String imageUrlInter) {
+	public ImageClientImpl(String pId, String srvId, String srvPwd, String imageUrl, String imageUrlInter) {
 		this.pId = pId;
 		this.srvId = srvId;
 		this.srvPwd = srvPwd;
@@ -52,14 +50,12 @@ public class ImageClientImpl implements IImageClient {
 		return imageUrl;
 	}
 
-	public InputStream getImageStream(String imageId, String imageType,
-			String imageScale) {
+	public InputStream getImageStream(String imageId, String imageType, String imageScale) {
 		String downloadUrl = "";
 		if (StringUtils.isEmpty(imageScale)) {
 			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
-			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale
-					+ imageType;
+			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType;
 		}
 
 		log.info("Start to download " + downloadUrl);
@@ -74,8 +70,7 @@ public class ImageClientImpl implements IImageClient {
 				log.info("Successfully download " + downloadUrl);
 			}
 		} catch (Exception e) {
-			log.error("download " + imageId + "." + imageType + ", scale: "
-					+ imageScale, e);
+			log.error("download " + imageId + "." + imageType + ", scale: " + imageScale, e);
 		} finally {
 			httpGet.releaseConnection();
 		}
@@ -110,14 +105,12 @@ public class ImageClientImpl implements IImageClient {
 		return imageUrlInter + "/image/" + imageId + imageType;
 	}
 
-	public String getImageUrl(String imageId, String imageType,
-			String imageScale) {
+	public String getImageUrl(String imageId, String imageType, String imageScale) {
 		imageType = imageTypeFormat(imageType);
 		if (imageScale != null && imageScale.contains("X")) {
 			imageScale = imageScale.replace("X", "x");
 		}
-		return imageUrlInter + "/image/" + imageId + "_" + imageScale
-				+ imageType;
+		return imageUrlInter + "/image/" + imageId + "_" + imageScale + imageType;
 	}
 
 	public String getImageUploadUrl() {
@@ -130,8 +123,7 @@ public class ImageClientImpl implements IImageClient {
 		if (StringUtils.isEmpty(imageScale)) {
 			downloadUrl = imageUrl + "/image/" + imageId + imageType;
 		} else {
-			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale
-					+ imageType;
+			downloadUrl = imageUrl + "/image/" + imageId + "_" + imageScale + imageType;
 		}
 
 		return ImageUtil.getImage(downloadUrl);
@@ -153,8 +145,7 @@ public class ImageClientImpl implements IImageClient {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String upLoadImage(byte[] image, String name, int minWidth,
-			int minHeight) {
+	public String upLoadImage(byte[] image, String name, int minWidth, int minHeight) {
 
 		if (image == null)
 			return null;
@@ -170,22 +161,20 @@ public class ImageClientImpl implements IImageClient {
 		}
 
 		// 上传和删除要加安全验证 ，先简单实现吧，在头上放置用户的pid和服务id，及服务密码的sha1串，在服务端进行验证
-		String result = ImageUtil.upImage(upUrl, image, name, minWidth,
-				minHeight, createToken());
+		String result = ImageUtil.upImage(upUrl, image, name, minWidth, minHeight, createToken());
 		Map<String, String> json = new HashMap<String, String>();
 		json = gson.fromJson(result, Map.class);
-		if (null != json && null != json.get("result")
-				&& "success".equals(json.get("result"))) {
+		if (null != json && null != json.get("result") && "success".equals(json.get("result"))) {
 			id = json.get("id");
 		} else {
 			// 这里进行异常的处理
 			if (null != json && null != json.get("exception")) {
 				String exception = json.get("exception");
-				if (ImageSizeIllegalException.class.getSimpleName()
-						.equalsIgnoreCase(exception)) {
+				if (ImageSizeIllegalException.class.getSimpleName().equalsIgnoreCase(exception)) {
 					throw new ImageSizeIllegalException(json.get("message"));
 				}
 			}
+			log.error("result:" + result + ",json:" + json);
 			throw new PaasRuntimeException(result);
 		}
 
