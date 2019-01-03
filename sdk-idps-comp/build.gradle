@@ -16,7 +16,7 @@ publishing {
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-idps-base")
-							delegate.version("0.3.1")
+							delegate.version("0.3.2")
 						}
 					}
 				}
@@ -33,7 +33,7 @@ publishing {
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-idps-base")
-							delegate.version("0.3.1")
+							delegate.version("0.3.2")
 						}
 					}
 				}
@@ -48,8 +48,8 @@ publishing {
                 url publishReleaseURL
             }
 			credentials {
-				username = publishUserName
-				password = publishUserPassword
+				username = repoUser
+				password = repoPassword
 			}
 		}
 	}
