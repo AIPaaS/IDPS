@@ -257,7 +257,7 @@ public class GMClient {
 		if (Integer.valueOf(width) < 250) {
 			if (imageType.lastIndexOf(".jpg") >= 0) {
 				cmd.append(" -strip -define jpeg:preserve-settings ");
-				cmd.append(" -sharpen 0x1.2 ");
+				//cmd.append(" -sharpen 0x1.2 ");
 			}
 			cmd.append(" -quality 100 ");
 		} else {
