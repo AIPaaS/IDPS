@@ -1,3 +1,4 @@
 include "sdk-idps-base"
 include "sdk-idps-srv"
 include "sdk-idps-comp"
+include "idps-web"

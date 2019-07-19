@@ -10,13 +10,18 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.Constant;
+import com.ai.paas.util.StringUtil;
 
 public class ImageUtil {
-    private static final Log logger = LogFactory.getLog(ImageUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(ImageUtil.class);
+
+    private ImageUtil() {
+
+    }
 
     private static int connectionTimeout = 60000;
     private static int readTimeout = 60000;
@@ -30,7 +35,7 @@ public class ImageUtil {
     public static String upImage(String url, byte[] image, String name, int minWidth, int minHeight, String token) {
         HttpURLConnection connection = null;
         BufferedReader in = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         try {
             URL logoutUrl = new URL(url);
@@ -41,7 +46,7 @@ public class ImageUtil {
             connection.setReadTimeout(readTimeout);
             connection.setConnectTimeout(connectionTimeout);
             connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("Charsert", "UTF-8");
+            connection.setRequestProperty("Charsert", Constant.CHARSET_UTF8);
             connection.setRequestProperty("Content-Type",
                     "multipart/form-data; boundary=gc0p4Jq0M2Yt08jU534c0p;file=" + name);
             connection.setRequestProperty("filename", name);
@@ -59,19 +64,19 @@ public class ImageUtil {
                 in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String s = null;
                 while ((s = in.readLine()) != null) {
-                    result += s;
+                    result.append(s);
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Finished sending message to" + url);
-                    logger.debug("The http result is: " + result);
+                    logger.debug("Finished sending message to {}", url);
+                    logger.debug("The http result is: {}", result);
                 }
             } else {
                 logger.error("url:" + url + ", return code:" + connection.getResponseCode() + ",respMsg:"
                         + connection.getResponseMessage());
             }
-            return result;
+            return result.toString();
         } catch (SocketTimeoutException e) {
-            logger.warn("Socket Timeout Detected while attempting to send message to [" + url + "].");
+            logger.warn("Socket Timeout Detected while attempting to send message to [{}]", url);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -100,7 +105,7 @@ public class ImageUtil {
 
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug("Attempting to access " + url);
+                logger.debug("Attempting to access {}", url);
             }
             URL logoutUrl = new URL(url);
 
@@ -121,7 +126,7 @@ public class ImageUtil {
                 result = true;
             }
         } catch (SocketTimeoutException e) {
-            logger.warn("Socket Timeout Detected while attempting to send message to [" + url + "].");
+            logger.warn("Socket Timeout Detected while attempting to send message to [{}]", url);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -154,7 +159,7 @@ public class ImageUtil {
             connection.setReadTimeout(readTimeout);
             connection.setConnectTimeout(connectionTimeout);
             connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("Charsert", "UTF-8");
+            connection.setRequestProperty("Charsert", Constant.CHARSET_UTF8);
             connection.setRequestProperty("Content-type", "application/x-java-serialized-object");
             connection.connect();
 

@@ -10,19 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.ai.paas.ipaas.dss.DSSBaseFactory;
 import com.ai.paas.ipaas.dss.DSSFactory;
-import com.ai.paas.ipaas.dss.base.DSSBaseFactory;
-import com.ai.paas.ipaas.dss.base.interfaces.IDSSClient;
+import com.ai.paas.ipaas.dss.IDSSClient;
 import com.ai.paas.ipaas.image.ImageAuthDescriptor;
 import com.ai.paas.ipaas.utils.AuthUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class DeleteImageServlet extends HttpServlet {
-	private static final Logger log = LogManager.getLogger(DeleteImageServlet.class);
+    private static Logger log = LoggerFactory.getLogger(DeleteImageServlet.class);
 	private static final long serialVersionUID = 1594325791647123L;
 	
 	private ImageAuthDescriptor ad = null;

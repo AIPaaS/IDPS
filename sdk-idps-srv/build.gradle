@@ -1,8 +1,8 @@
 dependencies{
     compile project(":sdk-idps-base")
-    compile 'com.ai:ipaas-common:0.3'
-    compile 'com.ai:ipaas-uac:0.3'
-    compile 'com.ai:ipaas-ccs-inner:0.3'
+    compile 'com.ai:ipaas-common:1.0'
+    compile 'com.ai:ipaas-uac:1.0'
+    compile 'com.ai:ipaas-ccs-inner:1.0'
 }
 
 publishing {
@@ -16,9 +16,9 @@ publishing {
 				asNode().children().last() + {
 					delegate.dependencies {
 						delegate.dependency {
-	                        delegate.groupId("commons-httpclient")
-	                        delegate.artifactId("commons-httpclient")
-	                        delegate.version("3.1")
+	                        delegate.groupId("com.squareup.okhttp3")
+	                        delegate.artifactId("okhttp")
+	                        delegate.version("4.0.1")
 	                    }
 	                    delegate.dependency {
 	                        delegate.groupId("commons-codec")
@@ -28,17 +28,17 @@ publishing {
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-common")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-uac")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-ccs-inner")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 					}
 				}
@@ -52,10 +52,10 @@ publishing {
             pom.withXml {
 	            asNode().children().last() + {
 	                delegate.dependencies {
-	                    delegate.dependency {
-	                        delegate.groupId("commons-httpclient")
-	                        delegate.artifactId("commons-httpclient")
-	                        delegate.version("3.1")
+						delegate.dependency {
+	                        delegate.groupId("com.squareup.okhttp3")
+	                        delegate.artifactId("okhttp")
+	                        delegate.version("4.0.1")
 	                    }
 	                    delegate.dependency {
 	                        delegate.groupId("commons-codec")
@@ -65,17 +65,17 @@ publishing {
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-common")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-uac")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 						delegate.dependency {
 							delegate.groupId("com.ai")
 							delegate.artifactId("ipaas-ccs-inner")
-							delegate.version("0.3")
+							delegate.version("1.0")
 						}
 	                }
 	            }
